@@ -17,11 +17,16 @@ use File::Temp qw(tmpnam);
 use Web::NewsAPI;
 use LWP;
 use Try::Tiny;
+use utf8::all;
 
 use Sweat::Group;
 
 use Moo;
 use namespace::clean;
+
+BEGIN {
+    binmode STDOUT, ":utf8";
+}
 
 has 'groups' => (
     is => 'lazy',
