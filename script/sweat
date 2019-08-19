@@ -1,0 +1,141 @@
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+use v5.10;
+
+use Getopt::Long;
+use File::Slurper qw(read_text);
+use File::HomeDir;
+
+use Sweat;
+
+my $shuffle;
+my $help;
+my $version;
+my $no_chair;
+my $config_path;
+my $speaker;
+GetOptions (
+    help => \$help,
+    version => \$version,
+    'no-chair' => \$no_chair,
+    'speaker=s' => \$speaker,
+    'config=s' => \$config_path,
+);
+
+show_help_and_exit() if $help;
+show_version_and_exit() if $version;
+my $config = get_config();
+
+my %build_args;
+
+my $sweat = Sweat->new(
+    config => $config,
+);
+
+$sweat->sweat;
+
+sub show_help_and_exit {
+    show_version();
+    say q{};
+    say <<END;
+Usage:
+$0 [options]
+
+Options:
+--help          (You're reading it.)
+
+--version       Show version information and exit.
+
+--shuffle       Shuffle the drills before presenting them. It will still present
+                three sets of four drills in the same style-order (aerobic, then
+                lower-body, then upper-body, and finally core).
+
+--no-chair      No-chair mode. Drills requiring a chair will replace themselves
+                with a random drill of the same style.
+
+--no-jumping    No-jumping mode. Drills involving jumping or stomping will
+                replace themselves with a random drill of the same style.
+
+--speaker       Specify the text-to-speech program to use. Defaults to `say`.
+
+--entertainment Entertainment mode. Tries to fetch news and weather to read you
+                during drills, and tries to read you a fortune when done. Note
+                that this requires some additional setup to work.
+
+Examples:
+$0
+$0 --shuffle
+$0 --no-chair --speaker=espeak
+
+For more thorough documentation, please run `man sweat`.
+
+END
+    exit;
+}
+
+sub show_version_and_exit {
+    show_version();
+    exit;
+}
+
+sub show_version {
+    say "This is Sweat, version $Sweat::VERSION, by Jason McIntosh.";
+}
+
+sub get_config {
+    my $config;
+    if ( $config_path ) {
+        unless (-r $config_path) {
+            die "Can't read config file at $config_path.\n";
+        }
+    }
+    else {
+        $config_path = File::HomeDir->my_home . '/.sweat';
+    }
+
+    if ( -r $config_path ) {
+        $config = read_text( $config_path );
+    }
+    return $config;
+}
+
+=head1 NAME
+
+Sweat - a chatty workout timer.
+
+=head1 SYNOPSIS
+
+Run through a no-frills seven-minute workout:
+
+ sweat
+
+Run through a seven-minute workout, with semi-randomized drills:
+
+ sweat --shuffle
+
+Read in a configuration file and apply its settings:
+
+ sweat --config=/path/to/sweat.config
+
+Force the program to I<not> shuffle, overriding configuration-file settings:
+
+ sweat --shuffle=0
+
+Have the program read news headlines, weather, and tell dumb jokes while
+you exercise (requires some additional setup; see L<"CONFIGURATION">):
+
+ sweat --entertainment
+
+See a quick reference of all command-line options:
+
+ sweat --help
+
+=head1 CONFIGURATION
+
+=head1 NOTES
+
+=head1 AUTHOR
+
+Jason McIntosh <jmac@jmac.org>
