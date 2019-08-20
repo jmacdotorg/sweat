@@ -1,9 +1,5 @@
 package Sweat;
 
-# XXX PUNCHLIST
-# * Make a test that uses srand(1)
-# * Make the
-
 our $VERSION = 1;
 
 use v5.10;
@@ -18,6 +14,7 @@ use Web::NewsAPI;
 use LWP;
 use Try::Tiny;
 use utf8::all;
+use Term::ReadKey;
 
 use Sweat::Group;
 
@@ -26,6 +23,8 @@ use namespace::clean;
 
 BEGIN {
     binmode STDOUT, ":utf8";
+    ReadMode 3;
+    $SIG{TERM} => \&clean_up;
 }
 
 has 'groups' => (
@@ -149,6 +148,11 @@ has 'weather' => (
     isa => Str,
 );
 
+has 'speaker_pid' => (
+    is => 'rw',
+    isa => Int,
+);
+
 sub BUILD {
     my ($self, $args) = @_;
 
@@ -215,6 +219,7 @@ sub sweat {
     }
 
     $self->cool_down;
+    $self->clean_up;
 }
 
 sub order {
@@ -262,7 +267,10 @@ sub countdown {
     my $label = 'seconds left';
 
     for my $current_second (reverse(0..$seconds)) {
-        sleep 1;
+        my $keystroke = ReadKey (1);
+        if ( $keystroke ) {
+            $self->pause;
+        }
         if (
             ( grep {$_ == $current_second} @spoken_seconds )
             || ( $current_second && not ( $current_second % 10 ) )
@@ -276,6 +284,22 @@ sub countdown {
             }
         }
     }
+}
+
+sub pause {
+    my $self = shift;
+    if ( -e $temp_file ) {
+        my $group = getpgrp;
+        unlink $temp_file;
+        $SIG{TERM} = 'IGNORE';
+        my $result = kill ('TERM', -$group);
+        $SIG{TERM} = 'DEFAULT';
+    }
+    say "***PAUSED*** Press any key to resume.";
+    $self->leisurely_speak( 'Paused.' );
+    ReadKey (0);
+    say "Resuming...";
+    $self->leisurely_speak( 'Resuming.' );
 }
 
 sub entertainment_for_drill {
@@ -356,16 +380,25 @@ sub speak {
 
     say $message;
 
+    return if -e $temp_file;
+
     my $pid = fork;
-    unless ( $pid ) {
-        unless ( -e $temp_file ) {
-            open my $fh, '>', $temp_file;
-            print $fh $pid;
-            system ( $self->speech_program, $message );
-            unlink $temp_file;
-        }
+    if ( $pid ) {
+        $self->speaker_pid( $pid );
+    }
+    else {
+        open my $fh, '>', $temp_file;
+        print $fh $pid;
+        system ( $self->speech_program, $message );
+        unlink $temp_file;
         exit;
     }
+}
+
+sub leisurely_speak {
+    my ( $self, $message ) = @_;
+
+    system ( $self->speech_program, $message );
 }
 
 sub _build_drills {
@@ -394,6 +427,10 @@ sub _build_drills {
     }
 
     return \@final_drills;
+}
+
+sub clean_up {
+    ReadMode 0;
 }
 
 sub _build_groups {
