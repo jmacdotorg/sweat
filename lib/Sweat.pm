@@ -4,7 +4,8 @@ our $VERSION = 1;
 
 use v5.10;
 
-use strictures 2;
+use warnings;
+use strict;
 use Types::Standard qw(Int ArrayRef Maybe Str Bool HashRef);
 
 use List::Util qw(shuffle);
