@@ -237,11 +237,16 @@ sub order {
     );
     $self->countdown($self->drill_rest_length);
 
-    my ($extra_text, $url) = $self->entertainment_for_drill( $drill );
+    my ($extra_text, $url, $article) = $self->entertainment_for_drill( $drill );
     $extra_text //= q{};
 
     $self->speak( "Start now. $extra_text");
+    my $url_tempfile;
     if ( defined $url ) {
+        if ( $url =~ m{\Wyoutube.com/} ) {
+            $url_tempfile = $self->mangle_youtube_url( $article );
+            $url = "file://$url_tempfile";
+        }
         system( $self->url_program, $url );
     }
 
@@ -293,7 +298,7 @@ sub pause {
         my $group = getpgrp;
         unlink $temp_file;
         $SIG{TERM} = 'IGNORE';
-        my $result = kill ('TERM', -$group);
+        kill ('TERM', -$group);
         $SIG{TERM} = 'DEFAULT';
     }
     say "***PAUSED*** Press any key to resume.";
@@ -312,19 +317,20 @@ sub entertainment_for_drill {
 
     my $text;
     my $url;
+    my $article;
 
     if ( $drill->requires_side_switching ) {
         $text = $self->weather;
     }
     else {
-        my $article = $self->next_article;
-        $text = $article->title
+        $article = $self->next_article;
+        $text = ($article->title // q{})
                 . q{. }
-                . $article->description;
+                . ($article->description // q{});
         $url = $article->url;
     }
 
-    return ( $text, $url );
+    return ( $text, $url, $article );
 }
 
 
@@ -400,6 +406,32 @@ sub leisurely_speak {
     my ( $self, $message ) = @_;
 
     system ( $self->speech_program, $message );
+}
+
+# mangle_youtube_url: create a local file that just embeds the youtube
+#                     video, preventing autoplay.
+sub mangle_youtube_url {
+    my ( $self, $article ) = @_;
+    my $tempfile = File::Temp->new( SUFFIX => '.html' );
+    binmode $tempfile, ":utf8";
+    my $title = $article->title;
+    my $description = $article->description;
+    my $url = $article->url;
+
+    my ($video_id) = $url =~ m{v=(\w+)};
+
+    print $tempfile qq{<html><head><title>$title</title></head>}
+              . qq{<body><h1>$title</h1>}
+              . qq{<p>$description</p>}
+              . qq{<div><iframe src="https://www.youtube.com/embed/$video_id" }
+              . q{frameborder="0" allow="accelerometer; autoplay; }
+              . q{encrypted-media; gyroscope; picture-in-picture" }
+              . q{allowfullscreen></iframe></div>}
+              . q{<p><em>This article was mangled by Sweat so that its video }
+              . q{didn&#8217;t autoplay. You&#8217;re welcome.</em></p>}
+              . qq{</body></html>\n};
+
+    return $tempfile;
 }
 
 sub _build_drills {
