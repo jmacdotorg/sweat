@@ -1,6 +1,7 @@
 package Sweat::Drill;
 
-use strictures 2;
+use warnings;
+use strict;
 use Types::Standard qw(Bool Str);
 
 use List::Util qw(shuffle);

@@ -1,6 +1,7 @@
 package Sweat::Group;
 
-use strictures 2;
+use warnings;
+use strict;
 use Types::Standard qw(ArrayRef Str);
 
 use List::Util qw(shuffle);
