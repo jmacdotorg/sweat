@@ -1,22 +1,7 @@
-# NAME
+# Sweat
 
-Sweat - It's new $module
+This is a followup to [Brickfielder](https://github.com/jmacdotorg/brickfielder) -- it's a command-line exercise timer. I'm still putting together its first release and documentation and stuff.
 
-# SYNOPSIS
+You can try using it if you want!
 
-    use Sweat;
-
-# DESCRIPTION
-
-Sweat is ...
-
-# LICENSE
-
-Copyright (C) Jason McIntosh.
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-# AUTHOR
-
-Jason McIntosh <jmac@jmac.org>
+Watch this space.
