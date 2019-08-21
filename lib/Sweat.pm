@@ -16,6 +16,7 @@ use LWP;
 use Try::Tiny;
 use utf8::all;
 use Term::ReadKey;
+use POSIX qw(uname);
 
 use Sweat::Group;
 
@@ -113,13 +114,13 @@ has 'side_switch_length' => (
 has 'speech_program' => (
     is => 'rw',
     isa => Str,
-    default => 'say',
+    default => sub { (uname())[0] eq 'Darwin'? 'say' : 'espeak' },
 );
 
 has 'url_program' => (
     is => 'rw',
     isa => Str,
-    default => 'open',
+    default => sub { (uname())[0] eq 'Darwin'? 'open' : 'xdg-open' },
 );
 
 has 'fortune_program' => (

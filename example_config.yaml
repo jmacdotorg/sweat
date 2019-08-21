@@ -50,8 +50,7 @@ entertainment_mode: 1
 # line flags you wish to set.
 # It needs to accept some arbitrary text as a command-line argument.
 # You gotta have this for Sweat to work as intended!
-# Default: say (ships with macOS)
-# Try 'espeak' on Linux.
+# Default: say (macOS) or espeak (everything else)
 speech_program: say
 
 ##################
@@ -97,14 +96,12 @@ groups:
 ######################
 #
 # Fortune program location
-# Path to the 'fortune' program, including any additional command-line arguments
-# you wish to add. If set, then Sweat will read a fortune at the end of your
-# workout, and maybe at some other times too.
+# Path to the 'fortune' program, including any additional command-line
+# arguments you wish to add. If set, then at the end of your workout
+# Sweat will read you a dad-joke or an aphorism or a misattributed quote
+# that some system administrator somewhere enjoyed circa 1986.
 # Default: fortune
 fortune_program: fortune
-
-# URL-opening program location
-# Path to a program that will open its argument in a web browser.
 
 # NewsAPI key: If you define this, then Sweat will use NewsAPI to read you
 # some current news headlines.
@@ -121,6 +118,5 @@ newsapi_country: us
 # url_program: URL-opening program location
 # Path to a program that, given a URL, opens it in your default web browser.
 # Set it to nothing 
-# Default: open (ships with macOS)
-# Try 'xdg-open' on Linux.
+# Default: open (macOS) or xdg-open (everything else)
 url_program: open
