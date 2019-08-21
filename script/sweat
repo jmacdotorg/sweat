@@ -10,29 +10,32 @@ use File::HomeDir;
 
 use Sweat;
 
-my $shuffle;
-my $help;
-my $version;
-my $no_chair;
-my $config_path;
-my $speaker;
-GetOptions (
-    help => \$help,
-    version => \$version,
-    'no-chair' => \$no_chair,
-    'speaker=s' => \$speaker,
-    'config=s' => \$config_path,
+my %options;
+GetOptions ( \%options,
+    'help',
+    'version',
+    'no-chair',
+    'no-jumping',
+    'speaker-program=s',
+    'config=s',
+    'entertainment!',
+    'url-program=s',
+    'fortune-program=s',
+    'newsapi-key=s',
+    'newsapi-country=s',
 );
 
-show_help_and_exit() if $help;
-show_version_and_exit() if $version;
+show_help_and_exit() if $options{help};
+show_version_and_exit() if $options{version};
 my $config = get_config();
 
-my %build_args;
+my %sweat_args = %options;
+foreach (keys %sweat_args) {
+    s/-/_/;
+}
+$sweat_args{ config } = $config;
 
-my $sweat = Sweat->new(
-    config => $config,
-);
+my $sweat = Sweat->new( %sweat_args );
 
 $sweat->sweat;
 
@@ -86,6 +89,7 @@ sub show_version {
 
 sub get_config {
     my $config;
+    my $config_path = $options{config_path};
     if ( $config_path ) {
         unless (-r $config_path) {
             die "Can't read config file at $config_path.\n";

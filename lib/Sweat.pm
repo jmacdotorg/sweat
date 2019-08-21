@@ -170,11 +170,15 @@ sub BUILD {
     };
 
     for my $method( qw(shuffle entertainment no_chair no_jumping)) {
+        next if defined $args->{$method};
         my $value = $config->{$method} // 0;
         $self->$method($value);
     }
 
-    for my $method (qw(newsapi_key newsapi_country fortune_program speech_program)) {
+    for my $method (
+        qw(newsapi_key newsapi_country fortune_program speech_program)
+    ) {
+        next if defined $args->{$method};
         $self->$method($config->{$method}) if defined($config->{$method});
     }
 
