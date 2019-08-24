@@ -272,6 +272,7 @@ sub order {
 
 sub countdown {
     my ($self, $seconds) = @_;
+    return unless $seconds;
 
     my $seconds_label_cutoff = 10;
     my @spoken_seconds = (20, 15, 10, 5, 4, 3, 2, 1);
@@ -511,7 +512,9 @@ END
 
 1;
 
-=head1 Sweat - Library for the `sweat` command-line program
+=head1 NAME
+
+Sweat - Library for the `sweat` command-line program
 
 =head1 DESCRIPTION
 

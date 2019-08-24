@@ -1,12 +1,12 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Library for the `sweat` command-line program",
    "author" : [
       "Jason McIntosh <jmac@jmac.org>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v3.1.4, CPAN::Meta::Converter version 2.150005",
    "license" : [
-      "perl_5"
+      "mit"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
@@ -42,17 +42,25 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008001"
-         }
-      },
-      "test" : {
-         "requires" : {
-            "Test::More" : "0.98"
+            "File::Temp" : "0",
+            "FindBin" : "0",
+            "HTML::Strip" : "0",
+            "LWP" : "0",
+            "List::Util" : "0",
+            "Moo" : "0",
+            "POSIX" : "0",
+            "Term::ReadKey" : "0",
+            "Try::Tiny" : "0",
+            "Types::Standard" : "0",
+            "Web::NewsAPI" : "0",
+            "YAML" : "0",
+            "perl" : "v5.10.0",
+            "utf8::all" : "0"
          }
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01",
+   "version" : "1",
    "x_authority" : "cpan:JMAC",
    "x_serialization_backend" : "JSON::PP version 2.27300_01",
    "x_static_install" : 1

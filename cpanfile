@@ -1,0 +1,13 @@
+requires "File::Temp";
+requires "FindBin";
+requires "HTML::Strip";
+requires "LWP";
+requires "List::Util";
+requires "Moo";
+requires "POSIX";
+requires "Term::ReadKey";
+requires "Try::Tiny";
+requires "Types::Standard";
+requires "Web::NewsAPI";
+requires "YAML";
+requires "utf8::all";

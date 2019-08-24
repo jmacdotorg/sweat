@@ -19,6 +19,7 @@ GetOptions ( \%options,
     'speaker-program=s',
     'config=s',
     'entertainment!',
+    'shuffle!',
     'url-program=s',
     'fortune-program=s',
     'newsapi-key=s',
@@ -61,11 +62,14 @@ Options:
 --no-jumping    No-jumping mode. Drills involving jumping or stomping will
                 replace themselves with a random drill of the same style.
 
---speaker       Specify the text-to-speech program to use. Defaults to `say`.
+--speaker-program Specify the text-to-speech program to use. Defaults to `say`
+                  on macOS and 'espeak' on other systems.
 
 --entertainment Entertainment mode. Tries to fetch news and weather to read you
-                during drills, and tries to read you a fortune when done. Note
-                that this requires some additional setup to work.
+                during drills, and then invokes `fortune` when done. Note
+                that news requires "newsapi_key" (see below) to be defined.
+
+--newsapi_key   Your NewsAPI development key. Required in order for
 
 Examples:
 $0
@@ -107,7 +111,7 @@ sub get_config {
 
 =head1 NAME
 
-Sweat - a chatty workout timer.
+Sweat - a chatty, distracting, and flexible workout timer.
 
 =head1 SYNOPSIS
 
@@ -125,18 +129,90 @@ Read in a configuration file and apply its settings:
 
 Force the program to I<not> shuffle, overriding configuration-file settings:
 
- sweat --shuffle=0
+ sweat --no-shuffle
 
 Have the program read news headlines, weather, and tell dumb jokes while
-you exercise (requires some additional setup; see L<"CONFIGURATION">):
+you exercise:
 
- sweat --entertainment
+ sweat --entertainment --newsapi-key=MyNewsApiKey12345
 
 See a quick reference of all command-line options:
 
  sweat --help
 
+=head1 DESCRIPTION
+
+Sweat is a workout timer that helps distract you from the pain of
+exercise by chatting incessantly, using your computer's text-to-speech capabilities to read news headlines, crack
+strange old-man jokes, talk about the weather, and still manage to call out
+workout prompts when necessary.
+
+Sweat is optimized for the so-called Seven-Minute Workout (7MW), which
+leads you through twelve 30-second drills, with 10-second rests in
+between, focusing on four types of exercise: aerobic, lower-body,
+upper-body, and core. While it has sensible and widely accepted
+defaults, you can change or expand its list of drills if you really
+want, or adjust how many drills each workout entails, or the timing
+involved.
+
+Sweat features a friendly pause function, and a shuffle mode that will
+randomize the drills you receive within each type while keeping the types themselves in order,
+ensuring you get a varied and balanced workout.
+
+Sweat assumes you already know how to perform the drills it calls out,
+and trusts you to get through them in whatever way works best for you.
+Sweat will never judge you.
+
+Yes, Sweat is a command-line program. Get your butt off the chair once
+in a while and onto the floor, fellow hackers. It's good for you.
+
+=head1 USAGE TIPS
+
+Because we have the misfortune to live in the worst timeline, with all
+its news spiraling ever worseward, consider I<not> using entertainment
+mode when using Sweat to exercise with others. Sweat wants to provide
+you with necessary distraction -- not make you feel embarrassed or uncomfortable
+among friends, family, or colleagues.
+
+Put on some energetic music instead (sold separately), and feel free to
+encourage or distract one another with conversation about literally any
+topic other than the news.
+
+=head1 RUNNING SWEAT
+
+=head2 Pausing the workout
+
+With the window running Sweat focused, hit any key (except for control
+keys) to pause Sweat; it will click off its timer and stop talking. Hit
+a key again to resume the workout.
+
+Pause whenever you need to, or if you need Sweat to shut up for a second
+so you can pay attention to something else.
+
+=head2 Ending the workout early
+
+You can bail out of your workout early by just quitting the program in
+an ordinary way; Control-C will work on most systems.
+
+Quit whenever you need to, for any reason. Sweat will never judge you.
+It will always greet you upon your return with unfeigned gladness.
+
 =head1 CONFIGURATION
+
+=head2 Runtime options
+
+You can set any of these options on the command line, or in a configuration file,
+in YAML format. See L<"SYNOPSIS">, above, for a few
+examples on running sweat with command-line options, or see L<"Configuration file">, below,
+for more information on that topic.
+
+Note that you can try running Sweat without any options at all; most settings have
+sensible defaults, depending upon your operating system. If sweat requires settings or
+other resources that it can't find, it will tell you on startup.
+
+=head2 Configuration file
+
+The configuration file also gives you the opportunity to redefine Sweat's drill-list.
 
 =head1 NOTES
 
