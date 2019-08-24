@@ -12,6 +12,7 @@ use List::Util qw(shuffle);
 use YAML;
 use File::Temp qw(tmpnam);
 use Web::NewsAPI;
+use WWW::Wikipedia;
 use LWP;
 use Try::Tiny;
 use utf8::all;
@@ -19,6 +20,7 @@ use Term::ReadKey;
 use POSIX qw(uname);
 
 use Sweat::Group;
+use Sweat::Article;
 
 use Moo;
 use namespace::clean;
@@ -26,7 +28,8 @@ use namespace::clean;
 BEGIN {
     binmode STDOUT, ":utf8";
     ReadMode 3;
-    $SIG{TERM} => \&clean_up;
+    $SIG{TERM} = \&clean_up;
+    $| = 1;
 }
 
 has 'groups' => (
@@ -186,10 +189,14 @@ sub BUILD {
         $self->group_config( $group_data );
     }
 
+    if ( $args->{no_news} ) {
+        $self->newsapi_key( undef );
+    }
+
     if ( $self->entertainment ) {
         say "Loading entertainment...";
-        $self->_build_articles;
-        $self->_build_weather;
+        $self->articles;
+        $self->weather;
         say "...done.";
     }
 }
@@ -197,21 +204,48 @@ sub BUILD {
 sub _build_articles {
     my $self = shift;
 
-    my $newsapi;
-
-    try {
-        $newsapi = Web::NewsAPI->new(
-            api_key => $self->newsapi_key,
-        );
-        my $result = $newsapi->top_headlines(
-            country => $self->newsapi_country,
-            pageSize => $self->drill_count,
-        );
-        return [ $result->articles ];
+    if ( $self->newsapi_key ) {
+        try {
+            my $newsapi = Web::NewsAPI->new(
+                api_key => $self->newsapi_key,
+            );
+            my $result = $newsapi->top_headlines(
+                country => $self->newsapi_country,
+                pageSize => $self->drill_count,
+            );
+            return [
+                map { Sweat::Article->new_from_newsapi_article($_) }
+                    $result->articles
+            ];
+        }
+        catch {
+            die "Sweat ran into a problem fetching news articles: $_\n";
+        };
     }
-    catch {
-        die "Sweat ran into a problem fetching news articles: $_\n";
-    };
+    else {
+        try {
+            my $wp = WWW::Wikipedia->new;
+            my $article;
+            my @articles;
+            foreach ( 1..$self->drill_count ) {
+                if ( $article ) {
+                    my @related = $article->related;
+                    my $next_topic = (shuffle(@related))[0];
+                    $article = $wp->search( $next_topic );
+                }
+                else {
+                    $article = $wp->random;
+                }
+                push @articles,
+                     Sweat::Article->new_from_wikipedia_article( $article );
+                print ".";
+            }
+            return \@articles;
+        }
+        catch {
+            die "Sweat ran into a problem fetching Wikipedia articles: $_\n";
+        };
+    }
 
 }
 
@@ -338,9 +372,7 @@ sub entertainment_for_drill {
     }
     else {
         $article = $self->next_article;
-        $text = ($article->title // q{})
-                . q{. }
-                . ($article->description // q{});
+        $text = $article->text;
         $url = $article->url;
     }
 

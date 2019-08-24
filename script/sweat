@@ -24,6 +24,7 @@ GetOptions ( \%options,
     'fortune-program=s',
     'newsapi-key=s',
     'newsapi-country=s',
+    'no-news',
 );
 
 show_help_and_exit() if $options{help};
@@ -31,8 +32,14 @@ show_version_and_exit() if $options{version};
 my $config = get_config();
 
 my %sweat_args = %options;
-foreach (keys %sweat_args) {
-    s/-/_/;
+for my $key (keys %sweat_args) {
+    if ( $key =~ /-/ ) {
+        my $new_key = $key;
+        my $value = $sweat_args{$key};
+        $new_key =~ s/-/_/g;
+        $sweat_args{$new_key} = $value;
+        delete $sweat_args{$key};
+    }
 }
 $sweat_args{ config } = $config;
 
