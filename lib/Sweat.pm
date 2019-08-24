@@ -137,7 +137,7 @@ has 'newsapi_key' => (
     isa => Maybe[Str],
 );
 
-has 'newsapi_country' => (
+has 'country' => (
     is => 'rw',
     isa => Str,
     default => 'us',
@@ -179,7 +179,7 @@ sub BUILD {
     }
 
     for my $method (
-        qw(newsapi_key newsapi_country fortune_program speech_program)
+        qw(newsapi_key country fortune_program speech_program)
     ) {
         next if defined $args->{$method};
         $self->$method($config->{$method}) if defined($config->{$method});
@@ -210,7 +210,7 @@ sub _build_articles {
                 api_key => $self->newsapi_key,
             );
             my $result = $newsapi->top_headlines(
-                country => $self->newsapi_country,
+                country => $self->country,
                 pageSize => $self->drill_count,
             );
             return [

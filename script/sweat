@@ -23,7 +23,7 @@ GetOptions ( \%options,
     'url-program=s',
     'fortune-program=s',
     'newsapi-key=s',
-    'newsapi-country=s',
+    'country=s',
     'no-news',
 );
 
