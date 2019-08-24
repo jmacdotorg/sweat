@@ -27,9 +27,12 @@ use namespace::clean;
 
 BEGIN {
     binmode STDOUT, ":utf8";
-    ReadMode 3;
     $SIG{TERM} = \&clean_up;
     $| = 1;
+}
+
+sub DESTROY {
+    \&clean_up;
 }
 
 has 'groups' => (
@@ -192,6 +195,8 @@ sub BUILD {
     if ( $args->{no_news} ) {
         $self->newsapi_key( undef );
     }
+
+    ReadMode 3;
 
     if ( $self->entertainment ) {
         say "Loading entertainment...";

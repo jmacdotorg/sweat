@@ -54,34 +54,32 @@ sub show_help_and_exit {
 Usage:
 $0 [options]
 
-Options:
---help          (You're reading it.)
+For more thorough documentation, please run `man sweat`.
 
---version       Show version information and exit.
+Basic options:
+--config           Path to a Sweat config file
+--help             Show this screen and exit
+--version          Show version information and exit
+--shuffle          Randomize drills (to a certain extent)
+--no-shuffle       Force-disable shuffle, overriding config file
+--no-chair         Disallow drills that need a chair
+--no-jumping       Disallow drills involiving jumping or stomping
+--speaker-program  Path to your text-to-speech program
+--entertainment    Let Sweat chattily distract you from the pain of exercise
+--no-entertainment Well, you're no fun
 
---shuffle       Shuffle the drills before presenting them. It will still present
-                three sets of four drills in the same style-order (aerobic, then
-                lower-body, then upper-body, and finally core).
-
---no-chair      No-chair mode. Drills requiring a chair will replace themselves
-                with a random drill of the same style.
-
---no-jumping    No-jumping mode. Drills involving jumping or stomping will
-                replace themselves with a random drill of the same style.
-
---speaker-program Specify the text-to-speech program to use. Defaults to `say`
-                  on macOS and 'espeak' on other systems.
-
---entertainment Entertainment mode. Tries to fetch news and weather to read you
-                during drills, and then invokes `fortune` when done. Note
-                that news requires "newsapi_key" (see below) to be defined.
-
---newsapi_key   Your NewsAPI development key. Required in order for
+Entertainment options:
+--fortune-program  Path to your fortune program
+--newsapi_key      Your NewsAPI application key
+--country          Two-letter code of country to fetch articles from
+--no-news          Use Wikipedia as article source even if NewsAPI is available
+--url-program      Path to a program that opens a URL in your default browser
 
 Examples:
 $0
 $0 --shuffle
 $0 --no-chair --speaker=espeak
+$0 --config=/path/to/sweat/config --no-news
 
 For more thorough documentation, please run `man sweat`.
 
