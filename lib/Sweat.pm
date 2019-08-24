@@ -292,14 +292,16 @@ sub countdown {
                 $label = 'seconds';
             }
             else {
+                $self->shut_up; # Final countdown, so interrupt any chattiness
                 $self->speak( $current_second );
             }
         }
     }
 }
 
-sub pause {
+sub shut_up {
     my $self = shift;
+
     if ( -e $temp_file ) {
         my $group = getpgrp;
         unlink $temp_file;
@@ -307,6 +309,12 @@ sub pause {
         kill ('TERM', -$group);
         $SIG{TERM} = 'DEFAULT';
     }
+}
+
+sub pause {
+    my $self = shift;
+
+    $self->shut_up;
     say "***PAUSED*** Press any key to resume.";
     $self->leisurely_speak( 'Paused.' );
     ReadKey (0);
