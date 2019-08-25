@@ -550,7 +550,13 @@ individual drill definitions.
 Please note that the C<groups> attribute is not additive; if you define it at all,
 then you must define I<all> the drills and drill-groups that Sweat will use.
 
-=head1 NOTES
+=head1 NOTES AND BUGS
+
+=head2 Known issues
+
+Sweat is prone to quit unexpectedly if run as the child of another process.
+
+=head2 Other notes
 
 The default drills specify "knee lunges" and "abdominal crunches" because the words "lunges"
 and "crunches" sound too similar, without further context.

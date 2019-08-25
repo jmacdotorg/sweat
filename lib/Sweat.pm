@@ -409,7 +409,10 @@ sub countdown {
 sub shut_up {
     my $self = shift;
 
-    if ( -e $temp_file ) {
+    # We check for drill-length here for the sake of testing, which usually
+    # sets this to 0, and also runs under the `prove` program... which will
+    # get killed by the code below, oops. Something to improve later.
+    if ( -e $temp_file && $self->drill_length ) {
         my $group = getpgrp;
         unlink $temp_file;
         $SIG{TERM} = 'IGNORE';
