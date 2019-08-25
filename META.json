@@ -60,7 +60,18 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "1",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/jmacdotorg/sweat/issues"
+      },
+      "homepage" : "https://github.com/jmacdotorg/sweat",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/jmacdotorg/sweat.git",
+         "web" : "https://github.com/jmacdotorg/sweat"
+      }
+   },
+   "version" : "201908240",
    "x_authority" : "cpan:JMAC",
    "x_serialization_backend" : "JSON::PP version 2.27300_01",
    "x_static_install" : 1

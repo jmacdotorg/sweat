@@ -17,6 +17,7 @@ my $sweat = Sweat->new(
     drill_rest_length => 0,
     side_switch_length => 0,
     drill_prep_length => 0,
+    entertainment => 0,
 );
 
 $sweat->sweat;
