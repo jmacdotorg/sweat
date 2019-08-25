@@ -4,11 +4,16 @@ Sweat - a chatty, distracting, and flexible workout timer.
 
 # SYNOPSIS
 
-Run through a no-frills seven-minute workout:
+Run through a seven-minute workout while your computer reads trivia from
+Wikipedia, reports on the weather, and tells dumb jokes:
 
     sweat
 
-Run through a seven-minute workout, with semi-randomized drills:
+Run through a seven-minute workout, but without any of that other stuff:
+
+    sweat --no-entertainment
+
+Run through a seven-minute workout with semi-randomized drills:
 
     sweat --shuffle
 
@@ -20,10 +25,9 @@ Force the program to _not_ shuffle, overriding configuration-file settings:
 
     sweat --no-shuffle
 
-Have the program read news headlines, weather, and tell dumb jokes while
-you exercise:
+Have the program read news headlines instead of clicking around Wikipedia:
 
-    sweat --entertainment --newsapi-key=MyNewsApiKey12345
+    sweat --newsapi-key=MyNewsApiKey12345
 
 See a quick reference of all command-line options:
 
@@ -87,6 +91,10 @@ A no-chair mode that substitutes other drills when you find yourself in a space 
 
 A no-jumping mode is also available when you want to avoid stomping around on your downstairs neighbor's ceiling.
 
+### Lots of configuration options
+
+It's a command-line Unixish program, so of course it's far too configurable. Happily, its defaults should fit most needs...
+
 ## The Seven-Minute Workout
 
 If you're not already familiar with 7MW and its twelve drills, [this New York Times article may serve as an excellent introduction](https://well.blogs.nytimes.com/2013/05/09/the-scientific-7-minute-workout/).
@@ -96,6 +104,13 @@ to help guide you through 7MW. Some of them will work better than Sweat at makin
 with the exercises involved; you may find it helpful to check them out first.
 
 [You may also wish to read thoughts by Sweat's author about 7MW](https://fogknife.com/2015-01-11-seven-minute-workout.html).
+
+## Sweat is not a doctor
+
+**Please exercise responsibly.** Sweat wants to challenge you, but please do not push yourself too hard. If you start feeling
+bad in any way while using Sweat, _stop immediately_. Consult an actual doctor and not
+a weird program you found on the internet with any questions or concerns you have about
+setting up an exercise regimen for yourself.
 
 # RUNNING SWEAT
 
@@ -118,9 +133,7 @@ It will always greet you upon your return with unfeigned gladness.
 
 # OPTIONS AND CONFIGURATION
 
-## Basic options
-
-You can set any of these options on the command line, or in a configuration file. See ["SYNOPSIS"](#synopsis), above, for a few
+Except where otherwise noted, you can set any of these options on the command line, or in a configuration file. See ["SYNOPSIS"](#synopsis), above, for a few
 examples on running sweat with command-line options, or see ["Configuration file"](#configuration-file), below,
 for more information on that topic.
 
@@ -137,15 +150,16 @@ Note that you can try running Sweat without any options at all; most settings ha
 sensible defaults, depending upon your operating system. If sweat requires settings or
 other resources that it can't find, it will tell you on startup.
 
-### shuffle
-
-**Boolean.** Shuffle the drills before presenting them. It will still present three
-sets of four drills in the same style-order (aerobic, then lower-body,
-then upper-body, and finally core).
-
-Default: 0 (No shuffling)
+## Basic options
 
 ### entertainment
+
+    # On the command line
+    sweat --entertainment
+    sweat --no-entertainment
+
+    # In config
+    entertainment: 0
 
 **Boolean.** Allow Sweat to entertain you during the workout by reading articles fetched over
 the internet, the current weather, and other stuff.
@@ -154,7 +168,68 @@ See ["Entertainment options"](#entertainment-options) to fine-tune this behavior
 
 Default: 1
 
+### speech-program
+
+    # Example: Use the 'Victoria' voice with the Mac `say` program...
+    # On the command line
+    sweat --speech-program='say -v Victoria'
+
+    # In config
+    speech-program: say -v Victoria
+
+A valid command-line invocation of your computer's text-to-speech program, including any
+command-line arguments you may wish to include. It must take an arbitrary string of text
+as its main argument. Sweat will invoke this program every time it wishes to say something.
+
+Default: On Mac, it will default to using "say", a program that comes with the OS. On
+other systems, it will try "espeak", a free and open-source program that you may
+need to install first. You can find espeak in various package managers, or at
+[http://espeak.sourceforge.net](http://espeak.sourceforge.net).
+
+## Drill options
+
+### drill-count
+
+    # On the command line
+    sweat --drill-count=10
+
+    # In config
+    drill-count: 10
+
+The number of drills to include in the workout.
+
+If Sweat runs through every available drill before meeting this number, then
+it will start a new set, continuing until it meets this count.
+
+Default: 12
+
+**Please note** that you should not work through a large number of drills without mixing
+in some longer rest periods. Consider simply running Sweat multiple times, resting
+in between, rather than setting this number to something unusually large. (And run in
+`--no-news` mode if you don't want to hear the same headlines over and over.)
+
+### drill-length
+
+    # On the command line
+    sweat --drill-length=20
+
+    # In config
+    drill-length: 20
+
+The length of each drill, in seconds.
+
+Note that drills that involve side-switching (i.e. side plank in 7MW) will
+divide this in half for each side, with a short break in between.
+
+Default: 30
+
 ### chair
+
+    # On the command line
+    sweat --no-chair
+
+    # In config
+    chair: 0
 
 **Boolean.** Indicates the availability of a chair, for certain drills.
 
@@ -166,28 +241,85 @@ Default: 1
 
 ### jumping
 
+    # On the command line
+    sweat --no-jumping
+
+    # In config
+    jumping: 0
+
 **Boolean.** Indicates the tolerability of jumping, for certain drills.
 
 If false, then drills involving jumping or stomping will replace
 themselves with a random drill of the same style.
 
-### speaker-program
+### rest-length
 
-A valid command-line invocation of your computer's text-to-speech program, including any
-command-line arguments you may wish to include. It must take an arbitrary string of text
-as its main argument. Sweat will invoke this program every time it wishes to say something.
+    # On the command line
+    sweat --rest-length=20
 
-Default: On Mac, it will default to using "say", a program that comes with the OS. On
-other systems, it will try "espeak", a free and open-source program that you may
-need to install first. You can find espeak in various package managers, or at
-[http://espeak.sourceforge.net](http://espeak.sourceforge.net).
+    # In config
+    rest-length: 20
+
+The length of the rest period between drills, in seconds.
+
+This includes the preparatory period before the first drill.
+
+Default: 10
+
+### shuffle
+
+    # On the command line
+    sweat --shuffle
+    sweat --no-shuffle
+
+    # In config
+    shuffle: 1
+
+**Boolean.** Shuffle the drills before presenting them. It will still present three
+sets of four drills in the same style-order (aerobic, then lower-body,
+then upper-body, and finally core).
+
+Default: 0 (No shuffling)
 
 ## Entertainment options
 
 These options come into play only while running Sweat in entertainment mode
 (see ["entertainment"](#entertainment), above).
 
+### country
+
+    # On the command line
+    sweat --country=fr
+
+    # In config
+    country: fr
+
+The two-letter code for the country that NewsAPI will fetch its headlines from.
+
+Default: us
+
+### fortune-program
+
+    # Example: Run fortune in 'offensive-joke' mode
+    # On the command line
+    sweat --fortune-program='fortune -o'
+
+    # In config
+    fortune-program=fortune -o
+
+A valid command-line invocation (including any desired options) for a program that will say something witty (according to a typical Unix system administrator in 1988).
+When in entertainment mode, Sweat will invoke this at the end of every workout,
+reading the results out loud.
+
+Default: fortune
+
 ### newsapi-key
+
+    # On the command line
+    sweat --newsapi-key=MySecretNewsApiKey
+
+    # In config
+    drill-length: MySecretNewsApiKey
 
 An application key for NewsAPI. If provided with a valid key, then Sweat will
 fetch, read, and display top news headlines from a variety of sources during
@@ -199,13 +331,14 @@ If _not_ set, then Sweat will read and display Wikipedia articles instead.
 
 Default: none
 
-### country
-
-The two-letter code for the country that NewsAPI will fetch its headlines from.
-
-Default: us
-
 ### url-program
+
+    # Example: On Mac, always open URLs with Firefox:
+    # On the command line
+    sweat --url-program='open -a Firefox'
+
+    # In config
+    url-program: open -a Firefox
 
 A valid command-line invocation (including any desired options) for a program that opens a URL (provided as a main
 argument) in a browser.
@@ -215,36 +348,36 @@ On other it will try "xdg-open", a free and open-source program that you may
 need to install first. You can find xdg-open as part of "xdg-utils" in various package managers, or at
 [https://freedesktop.org/wiki/Software/xdg-utils/](https://freedesktop.org/wiki/Software/xdg-utils/).
 
-### fortune-program
-
-A valid command-line invocation (including any desired options) for a program that will say something witty (according to a typical Unix system administrator in 1988).
-When in entertainment mode, Sweat will invoke this at the end of every workout,
-reading the results out loud.
-
 ## Command-line-only options
 
 These options work only on the command line (and have no effect in a config file).
 
 ### config
 
+    sweat --config=/path/to/sweat.config
+
 Full path to a Sweat configuration file, in [YAML](https://metacpan.org/pod/YAML) format.
 
 Default: `.sweat`, in your home directory. (i.e. `$HOME/.sweat`)
 
+### help
+
+    sweat --help
+
+Prints a quick reference to Sweat's command-line options, then exits.
+
 ### no-news
+
+    sweat --no-news
 
 Forces Sweat to use Wikipedia articles as its main source of workout chatter,
 even if a valid NewsAPI key has been provided (via ["newsapi\_key"](#newsapi_key)).
 
 ### version
 
+    sweat --version
+
 Prints version and authorship information about Sweat, then exits.
-
-### help
-
-Prints a quick reference to Sweat's command-line options, then exits.
-
-Default: fortune
 
 ## Configuration file
 
@@ -253,8 +386,8 @@ will load this on startup, and apply all its settings _before_ applying any sett
 provided on the command line (thus letting you override config-file settings that way).
 
 You can provide a path to such a file via the ["config"](#config) command-line option. If
-you don't, Sweat will look for a config file at `$HOME/.sweat`, and if it doesn't
-find one there either it will continue without a config file.
+you don't, Sweat will look for a config file at `$HOME/.sweat`. If it doesn't
+find one there either, it will continue without loading a config file.
 
 If the config file exists but Sweat's YAML parser can't work with it, Sweat will
 complain and then exit.
