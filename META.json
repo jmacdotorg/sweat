@@ -42,6 +42,7 @@
       },
       "runtime" : {
          "requires" : {
+            "File::Spec" : "0",
             "File::Temp" : "0",
             "FindBin" : "0",
             "HTML::Strip" : "0",
@@ -49,9 +50,11 @@
             "List::Util" : "0",
             "Moo" : "0",
             "POSIX" : "0",
+            "Scalar::Util" : "0",
             "Term::ReadKey" : "0",
             "Try::Tiny" : "0",
             "Types::Standard" : "0",
+            "WWW::Wikipedia" : "0",
             "Web::NewsAPI" : "0",
             "YAML" : "0",
             "perl" : "v5.10.0",

@@ -1,10 +1,11 @@
-# NAME
+[![Build Status](https://travis-ci.com/jmacdotorg/sweat.svg?branch=master)](https://travis-ci.com/jmacdotorg/sweat)
+# Sweat
 
-Sweat - a chatty, distracting, and flexible workout timer.
+A chatty, distracting, and flexible workout timer.
 
-# SYNOPSIS
+# Examples
 
-Run through a seven-minute workout while your computer reads trivia from
+Run through a seven-minute workout while your computer reads aloud trivia from
 Wikipedia, reports on the weather, and tells dumb jokes:
 
     sweat
@@ -17,30 +18,18 @@ Run through a seven-minute workout with semi-randomized drills:
 
     sweat --shuffle
 
-Read in a configuration file and apply its settings:
-
-    sweat --config=/path/to/sweat.config
-
-Force the program to _not_ shuffle, overriding configuration-file settings:
-
-    sweat --no-shuffle
-
 Have the program read news headlines instead of clicking around Wikipedia:
 
     sweat --newsapi-key=MyNewsApiKey12345
 
-See a quick reference of all command-line options:
-
-    sweat --help
-
-# DESCRIPTION
+# Description
 
 Sweat is a workout timer that helps distract you from the pain of
 exercise by chatting incessantly, using your computer's text-to-speech capabilities to read news headlines, crack
 strange old-man jokes, talk about the weather, and still manage to call out
 workout prompts when necessary.
 
-Sweat is optimized for the so-called Seven-Minute Workout (7MW), which
+Sweat is optimized for the so-called [Seven-Minute Workout (7MW)](https://well.blogs.nytimes.com/2013/05/09/the-scientific-7-minute-workout/), which
 leads you through twelve 30-second drills, with 10-second rests in
 between. These focus on four types of exercise: aerobic, lower-body,
 upper-body, and core. While it has sensible and widely accepted
@@ -52,7 +41,7 @@ Sweat features a friendly pause function, and a shuffle mode that will
 randomize the drills you receive within each type while keeping the types themselves in order,
 ensuring you get a varied and balanced workout.
 
-Sweat assumes you already know how to perform the drills it calls out (see ["The Seven-Minute Workout"](#the-seven-minute-workout), below)
+Sweat assumes you already know how to perform the drills it calls out
 and trusts you to get through them in whatever way works best for you.
 Sweat will never judge you.
 
@@ -95,398 +84,45 @@ A no-jumping mode is also available when you want to avoid stomping around on yo
 
 It's a command-line Unixish program, so of course it's far too configurable. Happily, its defaults should fit most needs...
 
-## The Seven-Minute Workout
+# Installation
 
-If you're not already familiar with 7MW and its twelve drills, [this New York Times article may serve as an excellent introduction](https://well.blogs.nytimes.com/2013/05/09/the-scientific-7-minute-workout/).
+First, make sure you have the \`cpanm\` program on your machine. It is likely
+available as "cpanminus" in your favorite package manager. (Or install it from
+source, through the instructions at [http://cpanmin.us](http://cpanmin.us).)
 
-As that article suggests, oodles of apps and websites exist for all your mobile and desktop devices
-to help guide you through 7MW. Some of them will work better than Sweat at making you familiar
-with the exercises involved; you may find it helpful to check them out first.
+Then, run these commands:
 
-[You may also wish to read thoughts by Sweat's author about 7MW](https://fogknife.com/2015-01-11-seven-minute-workout.html).
+    cpanm --installdeps . # run under sudo to install at system level
+    perl Build.PL
+    perl Build build
+    perl Build install    # run under sudo to install at system-level
 
-## Sweat is not a doctor
+# Usage
 
-**Please exercise responsibly.** Sweat wants to challenge you, but please do not push yourself too hard. If you start feeling
-bad in any way while using Sweat, _stop immediately_. Consult an actual doctor and not
-a weird program you found on the internet with any questions or concerns you have about
-setting up an exercise regimen for yourself.
-
-# RUNNING SWEAT
-
-## Pausing the workout
-
-With the window running Sweat focused, hit any key (except for control
-keys) to pause Sweat; it will click off its timer and stop talking. Hit
-a key again to resume the workout.
-
-Pause whenever you need to, or if you need Sweat to shut up for a second
-so you can pay attention to something else.
-
-## Ending the workout early
-
-You can bail out of your workout early by just quitting the program in
-an ordinary way; Control-C will work on most systems.
-
-Quit whenever you need to, for any reason. Sweat will never judge you.
-It will always greet you upon your return with unfeigned gladness.
-
-# OPTIONS AND CONFIGURATION
-
-Except where otherwise noted, you can set any of these options on the command line, or in a configuration file. See ["SYNOPSIS"](#synopsis), above, for a few
-examples on running sweat with command-line options, or see ["Configuration file"](#configuration-file), below,
-for more information on that topic.
-
-**For boolean options** (such as `shuffle`), simply name them on the command line to invoke
-them: `--shuffle`, for example. To negate on the command like, precede with "no-", e.g.
-`--no-shuffle`. To set them in a configuration file, set them to 0 or 1 with YAML
-syntax: `shuffle: 1`.
-
-**For other options**, set them on the command line with an equals sign
-(--newsapi\_key=MySecretKey), or in a config file with YAML syntax
-(`newsapi_key: MySecretKey`).
-
-Note that you can try running Sweat without any options at all; most settings have
-sensible defaults, depending upon your operating system. If sweat requires settings or
-other resources that it can't find, it will tell you on startup.
-
-## Basic options
-
-### entertainment
-
-    # On the command line
-    sweat --entertainment
-    sweat --no-entertainment
-
-    # In config
-    entertainment: 0
-
-**Boolean.** Allow Sweat to entertain you during the workout by reading articles fetched over
-the internet, the current weather, and other stuff.
-
-See ["Entertainment options"](#entertainment-options) to fine-tune this behavior.
-
-Default: 1
-
-### speech-program
-
-    # Example: Use the 'Victoria' voice with the Mac `say` program...
-    # On the command line
-    sweat --speech-program='say -v Victoria'
-
-    # In config
-    speech-program: say -v Victoria
-
-A valid command-line invocation of your computer's text-to-speech program, including any
-command-line arguments you may wish to include. It must take an arbitrary string of text
-as its main argument. Sweat will invoke this program every time it wishes to say something.
-
-Default: On Mac, it will default to using "say", a program that comes with the OS. On
-other systems, it will try "espeak", a free and open-source program that you may
-need to install first. You can find espeak in various package managers, or at
-[http://espeak.sourceforge.net](http://espeak.sourceforge.net).
-
-## Drill options
-
-### drill-count
-
-    # On the command line
-    sweat --drill-count=10
-
-    # In config
-    drill-count: 10
-
-The number of drills to include in the workout.
-
-If Sweat runs through every available drill before meeting this number, then
-it will start a new set, continuing until it meets this count.
-
-Default: 12
-
-**Please note** that you should not work through a large number of drills without mixing
-in some longer rest periods. Consider simply running Sweat multiple times, resting
-in between, rather than setting this number to something unusually large. (And run in
-`--no-news` mode if you don't want to hear the same headlines over and over.)
-
-### drill-length
-
-    # On the command line
-    sweat --drill-length=20
-
-    # In config
-    drill-length: 20
-
-The length of each drill, in seconds.
-
-Note that drills that involve side-switching (i.e. side plank in 7MW) will
-divide this in half for each side, with a short break in between.
-
-Default: 30
-
-### chair
-
-    # On the command line
-    sweat --no-chair
-
-    # In config
-    chair: 0
-
-**Boolean.** Indicates the availability of a chair, for certain drills.
-
-If false, then drills requiring a chair will
-replace themselves with a random drill of the same style. (For example, a chairsome
-aerobic drill will get replaced with another, less chairish aerobic drill.)
-
-Default: 1
-
-### jumping
-
-    # On the command line
-    sweat --no-jumping
-
-    # In config
-    jumping: 0
-
-**Boolean.** Indicates the tolerability of jumping, for certain drills.
-
-If false, then drills involving jumping or stomping will replace
-themselves with a random drill of the same style.
-
-### rest-length
-
-    # On the command line
-    sweat --rest-length=20
-
-    # In config
-    rest-length: 20
-
-The length of the rest period between drills, in seconds.
-
-This includes the preparatory period before the first drill.
-
-Default: 10
-
-### shuffle
-
-    # On the command line
-    sweat --shuffle
-    sweat --no-shuffle
-
-    # In config
-    shuffle: 1
-
-**Boolean.** Shuffle the drills before presenting them. It will still present three
-sets of four drills in the same style-order (aerobic, then lower-body,
-then upper-body, and finally core).
-
-Default: 0 (No shuffling)
-
-## Entertainment options
-
-These options come into play only while running Sweat in entertainment mode
-(see ["entertainment"](#entertainment), above).
-
-### country
-
-    # On the command line
-    sweat --country=fr
-
-    # In config
-    country: fr
-
-The two-letter code for the country that NewsAPI will fetch its headlines from.
-
-Default: us
-
-### fortune-program
-
-    # Example: Run fortune in 'offensive-joke' mode
-    # On the command line
-    sweat --fortune-program='fortune -o'
-
-    # In config
-    fortune-program=fortune -o
-
-A valid command-line invocation (including any desired options) for a program that will say something witty (according to a typical Unix system administrator in 1988).
-When in entertainment mode, Sweat will invoke this at the end of every workout,
-reading the results out loud.
-
-Default: fortune
-
-### newsapi-key
-
-    # On the command line
-    sweat --newsapi-key=MySecretNewsApiKey
-
-    # In config
-    drill-length: MySecretNewsApiKey
-
-An application key for NewsAPI. If provided with a valid key, then Sweat will
-fetch, read, and display top news headlines from a variety of sources during
-your workout (unless run in `no-news` mode).
-
-You can fetch a free key for personal use at [https://newsapi.org](https://newsapi.org).
-
-If _not_ set, then Sweat will read and display Wikipedia articles instead.
-
-Default: none
-
-### url-program
-
-    # Example: On Mac, always open URLs with Firefox:
-    # On the command line
-    sweat --url-program='open -a Firefox'
-
-    # In config
-    url-program: open -a Firefox
-
-A valid command-line invocation (including any desired options) for a program that opens a URL (provided as a main
-argument) in a browser.
-
-Default: On Mac, it will default to "open", a program that comes with the OS.
-On other it will try "xdg-open", a free and open-source program that you may
-need to install first. You can find xdg-open as part of "xdg-utils" in various package managers, or at
-[https://freedesktop.org/wiki/Software/xdg-utils/](https://freedesktop.org/wiki/Software/xdg-utils/).
-
-## Command-line-only options
-
-These options work only on the command line (and have no effect in a config file).
-
-### config
-
-    sweat --config=/path/to/sweat.config
-
-Full path to a Sweat configuration file, in [YAML](https://metacpan.org/pod/YAML) format.
-
-Default: `.sweat`, in your home directory. (i.e. `$HOME/.sweat`)
-
-### help
+Once installed, you can get a quick-reference guide like this:
 
     sweat --help
 
-Prints a quick reference to Sweat's command-line options, then exits.
+Or far more thorough instructions this way:
 
-### no-news
+    man sweat
 
-    sweat --no-news
+# Notes
 
-Forces Sweat to use Wikipedia articles as its main source of workout chatter,
-even if a valid NewsAPI key has been provided (via ["newsapi\_key"](#newsapi_key)).
+This is this module's first release (or nearly so). It works for the
+author's own use-cases, but it's probably buggy beyond that. Please
+report issues at [the module's GitHub
+site](https://github.com/jmacdotorg/newsapi-perl). Code and documentation
+pull requests are very welcome!
 
-### version
+# Author
 
-    sweat --version
+Jason McIntosh (jmac@jmac.org)
 
-Prints version and authorship information about Sweat, then exits.
-
-## Configuration file
-
-You can optionally provide Sweat with a configuration file in YAML format. Sweat
-will load this on startup, and apply all its settings _before_ applying any settings
-provided on the command line (thus letting you override config-file settings that way).
-
-You can provide a path to such a file via the ["config"](#config) command-line option. If
-you don't, Sweat will look for a config file at `$HOME/.sweat`. If it doesn't
-find one there either, it will continue without loading a config file.
-
-If the config file exists but Sweat's YAML parser can't work with it, Sweat will
-complain and then exit.
-
-In the config file, you can set any of the options listed under ["Basic options"](#basic-options)
-or ["Entertainment options"](#entertainment-options), using YAML syntax.
-
-The configuration file also gives you the opportunity to redefine Sweat's drill-list.
-You can accomplish this by defining a `groups` attribute, which contains several
-groups of related drills.
-
-Please allow me to explain further by simply showing the definition for Sweat's
-default drills, which demonstrate all the special attributes meaningful to
-individual drill definitions.
-
-    groups:
-     - name: aerobic
-       drills:
-         - name: jumping jacks
-           requires_jumping: 1
-         - name: high knees
-           requires_jumping: 1
-         - name: step-ups
-           requires_a_chair: 1
-     - name: lower-body
-       drills:
-         - name: wall sit
-         - name: squats
-         - name: knee lunges
-     - name: upper-body
-       drills:
-         - name: push-ups
-         - name: tricep dips
-           requires_a_chair: 1
-         - name: rotational push-ups
-     - name: core
-       drills:
-         - name: abdominal crunches
-         - name: plank
-         - name: side plank
-           requires_side_switching: 1
-
-Please note that the `groups` attribute is not additive; if you define it at all,
-then you must define _all_ the drills and drill-groups that Sweat will use.
-
-# NOTES AND BUGS
-
-## Known issues
-
-Sweat is prone to quit unexpectedly if run as the child of another process.
-
-## Other notes
-
-The default drills specify "knee lunges" and "abdominal crunches" because the words "lunges"
-and "crunches" sound too similar, without further context.
-
-# AUTHOR
-
-Jason McIntosh <jmac@jmac.org>
-
-# COPYRIGHT AND LICENSE
+# Copyright and licence
 
 This software is Copyright (c) 2019 by Jason McIntosh.
 
 This is free software, licensed under:
 
     The MIT (X11) License
-
-# A PERSONAL REQUEST
-
-My ability to share and maintain free, open-source software like this
-depends upon my living in a society that allows me the free time and
-personal liberty to create work benefiting people other than just myself
-or my immediate family. I recognize that I got a head start on this due
-to an accident of birth, and I strive to convert some of my unclaimed
-time and attention into work that, I hope, gives back to society in some
-small way.
-
-Worryingly, I find myself today living in a country experiencing a
-profound and unwelcome political upheaval, with its already flawed
-democracy under grave threat from powerful authoritarian elements. These
-powers wish to undermine this society, remolding it according to their
-deeply cynical and strictly zero-sum philosophies, where nobody can gain
-without someone else losing.
-
-Free and open-source software has no place in such a world. As such,
-these autocrats' further ascension would have a deleterious effect on my
-ability to continue working for the public good.
-
-Therefore, if you would like to financially support my work, I would ask
-you to consider a donation to one of the following causes. It would mean
-a lot to me if you did. (You can tell me about it if you'd like to, but
-you don't have to.)
-
-- [The American Civil Liberties Union](https://aclu.org)
-- [The Democratic National Committee](https://democrats.org)
-- [Earthjustice](https://earthjustice.org)
-
-If these words do move you to make a donation of at least $10 to any nonprofit making the world better, and you let me
-know about it, I will mail you sticker as a token of gratitude. See
-[this article on my blog](https://fogknife.com/2019-08-03-how-to-support-fogknife.html) for
-more information.
