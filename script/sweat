@@ -16,7 +16,7 @@ GetOptions ( \%options,
     'version',
     'chair!',
     'jumping!',
-    'speaker-program=s',
+    'speech-program=s',
     'config=s',
     'entertainment!',
     'shuffle!',
@@ -56,7 +56,7 @@ Basic options:
 --no-shuffle       Force-disable shuffle, overriding config file
 --no-chair         Disallow drills that need a chair
 --no-jumping       Disallow drills involiving jumping or stomping
---speaker-program  Path to your text-to-speech program
+--speech-program  Path to your text-to-speech program
 --entertainment    Let Sweat chattily distract you from the pain of exercise
 --no-entertainment Well, you're no fun
 
@@ -70,7 +70,7 @@ Entertainment options:
 Examples:
 $0
 $0 --shuffle
-$0 --no-chair --speaker=espeak
+$0 --no-chair --speech-program=espeak
 $0 --config=/path/to/sweat/config --no-news
 
 For more thorough documentation, please run `man sweat`.
@@ -195,6 +195,10 @@ A no-chair mode that substitutes other drills when you find yourself in a space 
 
 A no-jumping mode is also available when you want to avoid stomping around on your downstairs neighbor's ceiling.
 
+=head3 Lots of configuration options
+
+It's a command-line Unixish program, so of course it's far too configurable. Happily, its defaults should fit most needs...
+
 =head2 The Seven-Minute Workout
 
 If you're not already familiar with 7MW and its twelve drills, L<this New York Times article may serve as an excellent introduction|https://well.blogs.nytimes.com/2013/05/09/the-scientific-7-minute-workout/>.
@@ -279,7 +283,7 @@ B<Boolean.> Indicates the tolerability of jumping, for certain drills.
 If false, then drills involving jumping or stomping will replace
 themselves with a random drill of the same style.
 
-=head3 speaker-program
+=head3 speech-program
 
 A valid command-line invocation of your computer's text-to-speech program, including any
 command-line arguments you may wish to include. It must take an arbitrary string of text
