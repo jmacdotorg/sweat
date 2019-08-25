@@ -146,7 +146,7 @@ workout prompts when necessary.
 
 Sweat is optimized for the so-called Seven-Minute Workout (7MW), which
 leads you through twelve 30-second drills, with 10-second rests in
-between, focusing on four types of exercise: aerobic, lower-body,
+between. These focus on four types of exercise: aerobic, lower-body,
 upper-body, and core. While it has sensible and widely accepted
 defaults, you can change or expand its list of drills if you really
 want, or adjust how many drills each workout entails, or the timing
@@ -156,24 +156,54 @@ Sweat features a friendly pause function, and a shuffle mode that will
 randomize the drills you receive within each type while keeping the types themselves in order,
 ensuring you get a varied and balanced workout.
 
-Sweat assumes you already know how to perform the drills it calls out,
+Sweat assumes you already know how to perform the drills it calls out (see L<"The Seven-Minute Workout">, below)
 and trusts you to get through them in whatever way works best for you.
 Sweat will never judge you.
 
 Yes, Sweat is a command-line program. Get your butt off the chair once
 in a while and onto the floor, fellow hackers. It's good for you.
 
-=head1 USAGE TIPS
+=head2 How Sweat is different from other timers
 
-Because we have the misfortune to live in the worst timeline, with all
-its news spiraling ever worseward, consider I<not> using entertainment
-mode when using Sweat to exercise with others. Sweat wants to provide
-you with necessary distraction -- not make you feel embarrassed or uncomfortable
-among friends, family, or colleagues.
+Sweat's major features that most other 7MW timers don't have:
 
-Put on some energetic music instead (sold separately), and feel free to
-encourage or distract one another with conversation about literally any
-topic other than the news.
+=head3 A speech-centered UI
+
+Sweat guides you through voice alone (with a simple text transcription in its terminal window).
+
+=head3 Chatty entertainment while you struggle
+
+Sweat will (unless you ask it not to) click through a randomly chosen thread of related Wikipedia articles while you work out and read aloud what it finds.
+The workout takes priority, so this intentionally distracting chatter will not make you miss any exercise cues.
+
+With a little extra configuration, you can have Sweat instead read you current news headlines from a variety of sources.
+
+Sweat will also tell you the local weather during certain drills, and end by reading aloud the output of the `fortune` program (if available).
+
+=head3 Optional drill-shuffling
+
+For variety's sake, you can shuffle the drills out of their standard order. While you still get three rounds of aerobic, lower-body, upper-body, and core drills in that order, Sweat will randomize the order of the three drills within each category.
+
+=head3 Pause between side-switching
+
+Halfway through the side-plank drill, Sweat gives you a few seconds to adjust yourself.
+(For some reason, few if any other timers seems to bother with this.)
+
+=head3 No-chair and no-jumping modes
+
+A no-chair mode that substitutes other drills when you find yourself in a space (e.g. a hotel room) with no suitably stable chair to exercise with.
+
+A no-jumping mode is also available when you want to avoid stomping around on your downstairs neighbor's ceiling.
+
+=head2 The Seven-Minute Workout
+
+If you're not already familiar with 7MW and its twelve drills, L<this New York Times article may serve as an excellent introduction|https://well.blogs.nytimes.com/2013/05/09/the-scientific-7-minute-workout/>.
+
+As that article suggests, oodles of apps and websites exist for all your mobile and desktop devices
+to help guide you through 7MW. Some of them will work better than Sweat at making you familiar
+with the exercises involved; you may find it helpful to check them out first.
+
+L<You may also wish to read thoughts by Sweat's author about 7MW|https://fogknife.com/2015-01-11-seven-minute-workout.html>.
 
 =head1 RUNNING SWEAT
 
@@ -198,8 +228,7 @@ It will always greet you upon your return with unfeigned gladness.
 
 =head2 Basic options
 
-You can set any of these options on the command line, or in a configuration file,
-in YAML format. See L<"SYNOPSIS">, above, for a few
+You can set any of these options on the command line, or in a configuration file. See L<"SYNOPSIS">, above, for a few
 examples on running sweat with command-line options, or see L<"Configuration file">, below,
 for more information on that topic.
 
@@ -210,7 +239,7 @@ syntax: C<shuffle: 1>.
 
 B<For other options>, set them on the command line with an equals sign
 (--newsapi_key=MySecretKey), or in a config file with YAML syntax
-(C<newsapi_key: MySecretKey).
+(C<newsapi_key: MySecretKey>).
 
 Note that you can try running Sweat without any options at all; most settings have
 sensible defaults, depending upon your operating system. If sweat requires settings or
@@ -378,6 +407,11 @@ individual drill definitions.
 
 Please note that the C<groups> attribute is not additive; if you define it at all,
 then you must define I<all> the drills and drill-groups that Sweat will use.
+
+=head1 NOTES
+
+The default drills specify "knee lunges" and "abdominal crunches" because the words "lunges"
+and "crunches" sound too similar, without further context.
 
 =head1 AUTHOR
 
