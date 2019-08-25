@@ -77,19 +77,19 @@ has 'shuffle' => (
 
 has 'entertainment' => (
     is => 'rw',
-    default => 0,
+    default => 1,
     isa => Bool,
 );
 
-has 'no_chair' => (
+has 'chair' => (
     is => 'rw',
-    default => 0,
+    default => 1,
     isa => Bool,
 );
 
-has 'no_jumping' => (
+has 'jumping' => (
     is => 'rw',
-    default => 0,
+    default => 1,
     isa => Bool,
 );
 
@@ -175,17 +175,25 @@ sub BUILD {
             . "\n";
     };
 
-    for my $method( qw(shuffle entertainment no_chair no_jumping)) {
+    foreach ( $args, $config ) {
+        _mangle_args( $_ );
+    }
+
+    for my $method( qw(shuffle entertainment chair jumping)) {
         next if defined $args->{$method};
-        my $value = $config->{$method} // 0;
-        $self->$method($value);
+        if ( defined $config->{$method} ) {
+            my $value = $config->{$method} // 0;
+            $self->$method($value);
+        }
     }
 
     for my $method (
         qw(newsapi_key country fortune_program speech_program)
     ) {
         next if defined $args->{$method};
-        $self->$method($config->{$method}) if defined($config->{$method});
+        if ( defined $config->{$method} ) {
+            $self->$method($config->{$method});
+        }
     }
 
     if ( my $group_data = $config->{groups} ) {
@@ -553,6 +561,20 @@ sub _default_group_config {
     - name: side plank
       requires_side_switching: 1
 END
+}
+
+sub _mangle_args {
+    my ( $args ) = @_;
+
+    for my $key (keys %$args) {
+        if ( $key =~ /-/ ) {
+            my $new_key = $key;
+            my $value = $$args{$key};
+            $new_key =~ s/-/_/g;
+            $$args{$new_key} = $value;
+            delete $$args{$key};
+        }
+    }
 }
 
 1;

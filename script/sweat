@@ -14,8 +14,8 @@ my %options;
 GetOptions ( \%options,
     'help',
     'version',
-    'no-chair',
-    'no-jumping',
+    'chair!',
+    'jumping!',
     'speaker-program=s',
     'config=s',
     'entertainment!',
@@ -32,15 +32,7 @@ show_version_and_exit() if $options{version};
 my $config = get_config();
 
 my %sweat_args = %options;
-for my $key (keys %sweat_args) {
-    if ( $key =~ /-/ ) {
-        my $new_key = $key;
-        my $value = $sweat_args{$key};
-        $new_key =~ s/-/_/g;
-        $sweat_args{$new_key} = $value;
-        delete $sweat_args{$key};
-    }
-}
+
 $sweat_args{ config } = $config;
 
 my $sweat = Sweat->new( %sweat_args );

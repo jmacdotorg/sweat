@@ -46,15 +46,15 @@ sub reset_drills {
     my $self = shift;
 
     my %restriction_map = (
-        no_jumping => 'requires_jumping',
-        no_chair => 'requires_a_chair',
+        jumping => 'requires_jumping',
+        chair => 'requires_a_chair',
     );
 
     for my $drill ( @{ $self->drills } ) {
         $drill->is_used(0);
         for my $restriction ( keys %restriction_map ) {
             my $attribute = $restriction_map{$restriction};
-            if ( $drill->$attribute && $self->sweat->$restriction ) {
+            if ( $drill->$attribute && !$self->sweat->$restriction ) {
                 $drill->is_used(1);
                 last;
             }
