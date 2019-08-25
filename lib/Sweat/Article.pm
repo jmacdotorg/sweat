@@ -79,3 +79,18 @@ sub new_from_wikipedia_article {
 }
 
 1;
+
+=head1 Sweat::Article - Library for the `sweat` command-line program
+
+=head1 DESCRIPTION
+
+This library is intended for internal use by the L<sweat> command-line program,
+and as such offers no publicly documented methods.
+
+=head1 SEE ALSO
+
+L<sweat>
+
+=head1 AUTHOR
+
+Jason McIntosh <jmac@jmac.org>
