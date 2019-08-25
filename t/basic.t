@@ -10,6 +10,9 @@ use Sweat;
 
 use Test::More;
 
+# For now, just run a very basic test with silly options and make sure that
+# the transcript looks as expected.
+
 my $sweat = Sweat->new(
     drill_count => 13,
     speech_program => "$FindBin::Bin/bin/noop",
@@ -20,8 +23,13 @@ my $sweat = Sweat->new(
     entertainment => 0,
 );
 
+my $transcript;
+open (my $fh, '>', \$transcript);
+my $old_fh = select $fh;
 $sweat->sweat;
+select $old_fh;
+close $fh;
 
-ok(1);
+is (length $transcript, 718, 'Basic transcript looks correct.');
 
 done_testing();
