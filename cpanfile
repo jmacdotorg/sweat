@@ -1,3 +1,4 @@
+requires "File::Spec";
 requires "File::Temp";
 requires "FindBin";
 requires "HTML::Strip";
@@ -5,9 +6,11 @@ requires "LWP";
 requires "List::Util";
 requires "Moo";
 requires "POSIX";
+requires "Scalar::Util";
 requires "Term::ReadKey";
 requires "Try::Tiny";
 requires "Types::Standard";
+requires "WWW::Wikipedia";
 requires "Web::NewsAPI";
 requires "YAML";
 requires "utf8::all";
