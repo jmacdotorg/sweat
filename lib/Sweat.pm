@@ -27,8 +27,6 @@ use namespace::clean;
 
 BEGIN {
     binmode STDOUT, ":utf8";
-
-    ReadMode 3;
 }
 
 sub DEMOLISH {
@@ -99,7 +97,7 @@ has 'drill_length' => (
     default => 30,
 );
 
-has 'drill_rest_length' => (
+has 'rest_length' => (
     is => 'rw',
     isa => Int,
     default => 10,
@@ -197,10 +195,8 @@ sub BUILD {
     }
 
     for my $method (
-        qw(newsapi_key country fortune_program speech_program)
+        qw(newsapi_key country fortune_program speech_program url_program)
     ) {
-        if ( $method eq 'speech_program' ) {
-        }
         next if defined $args->{$method};
         if ( defined $config->{$method} ) {
             $self->$method($config->{$method});
@@ -235,9 +231,9 @@ sub _check_resources {
     }
 
     my $speech_program = $self->speech_program;
-    my $quoted_speech_program = quotemeta $speech_program;
+    my $bare_speech_program = (split /\s+/, $speech_program)[0];
 
-    unless ( `command -v '$quoted_speech_program'` ) {
+    unless ( `command -v '$bare_speech_program'` ) {
         die "ERROR: Sweat's 'speech-program' configuration is set to "
             . "'$speech_program', but there doesn't seem to be a program "
             . "there. I can't run without a speech program... sorry!\n";
@@ -247,8 +243,8 @@ sub _check_resources {
         foreach (qw (url fortune) ) {
             my $method = "${_}_program";
             my $program = $self->$method;
-            my $quoted_program = quotemeta $program;
-            unless ( `command -v '$quoted_program'` ) {
+            my $bare_program = (split /\s+/, $program)[0];
+            unless ( `command -v '$bare_program'` ) {
             $self->$method( undef );
             warn "WARNING: Sweat's '$_-program' configuration is set to "
                  . "'$program', but there doesn't seem to be a program there. "
@@ -324,6 +320,8 @@ my $temp_file = tmpnam();
 sub sweat {
     my $self = shift;
 
+    ReadMode 3;
+
     for my $drill (@{ $self->drills }) {
         $self->order($drill);
     }
@@ -344,7 +342,7 @@ sub order {
         . $self->drill_counter
         . '.'
     );
-    $self->countdown($self->drill_rest_length);
+    $self->countdown($self->rest_length);
 
     my ($extra_text, $url, $article) = $self->entertainment_for_drill( $drill );
     $extra_text //= q{};
@@ -357,7 +355,7 @@ sub order {
             $url = "file://$url_tempfile";
         }
         if ( defined $self->url_program ) {
-            system( $self->url_program, $url );
+            system( split (/\s+/, $self->url_program), $url );
         }
     }
 
@@ -514,7 +512,7 @@ sub speak {
     else {
         open my $fh, '>', $temp_file;
         print $fh $pid;
-        system ( $self->speech_program, $message );
+        system ( split (/\s+/, $self->speech_program), $message );
         unlink $temp_file;
         exit;
     }
@@ -523,7 +521,7 @@ sub speak {
 sub leisurely_speak {
     my ( $self, $message ) = @_;
 
-    system ( $self->speech_program, $message );
+    system ( split (/\s+/, $self->speech_program), $message );
 }
 
 sub rudely_speak {
