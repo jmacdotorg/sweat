@@ -224,7 +224,7 @@ sub _check_resources {
 
     # Based on:
     # https://stackoverflow.com/questions/592620/how-to-check-if-a-program-exists-from-a-bash-script
-    my $result = system 'command -v foo';
+    my $result = system ('command', '-v', 'this-command-doesnt-exist-sweat',);
 
     if ( $result < 0 ) {
         say "Uh oh, this system lacks the POSIX 'command' command, and thus I "
