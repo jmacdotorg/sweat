@@ -27,6 +27,7 @@ GetOptions ( \%options,
     'no-news',
     'drill-length=i',
     'rest-length=i',
+    'drill-count=i',
 );
 
 show_help_and_exit() if $options{help};

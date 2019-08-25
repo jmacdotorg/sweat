@@ -195,7 +195,10 @@ sub BUILD {
     }
 
     for my $method (
-        qw(newsapi_key country fortune_program speech_program url_program)
+        qw(
+            newsapi_key country fortune_program speech_program url_program
+            rest_length drill_length drill_count
+        )
     ) {
         next if defined $args->{$method};
         if ( defined $config->{$method} ) {
