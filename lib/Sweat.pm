@@ -28,10 +28,11 @@ use namespace::clean;
 BEGIN {
     binmode STDOUT, ":utf8";
     $SIG{TERM} = \&clean_up;
-    $| = 1;
+
+    ReadMode 3;
 }
 
-sub DESTROY {
+sub DEMOLISH {
     \&clean_up;
 }
 
@@ -125,13 +126,13 @@ has 'speech_program' => (
 
 has 'url_program' => (
     is => 'rw',
-    isa => Str,
+    isa => Maybe[Str],
     default => sub { (uname())[0] eq 'Darwin'? 'open' : 'xdg-open' },
 );
 
 has 'fortune_program' => (
     is => 'rw',
-    isa => Str,
+    isa => Maybe[Str],
     default => 'fortune',
 );
 
@@ -160,6 +161,15 @@ has 'speaker_pid' => (
     is => 'rw',
     isa => Int,
 );
+
+around BUILDARGS => sub {
+    my ( $orig, $class, %args ) = @_;
+
+    _mangle_args( \%args );
+
+    return $class->$orig(%args);
+
+};
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -190,6 +200,8 @@ sub BUILD {
     for my $method (
         qw(newsapi_key country fortune_program speech_program)
     ) {
+        if ( $method eq 'speech_program' ) {
+        }
         next if defined $args->{$method};
         if ( defined $config->{$method} ) {
             $self->$method($config->{$method});
@@ -204,14 +216,60 @@ sub BUILD {
         $self->newsapi_key( undef );
     }
 
-    ReadMode 3;
+    $self->_check_resources;
+    $self->_load_entertainment;
+
+}
+
+sub _check_resources {
+    my $self = shift;
+
+    # Based on:
+    # https://stackoverflow.com/questions/592620/how-to-check-if-a-program-exists-from-a-bash-script
+    my $result = system 'command -v foo';
+
+    if ( $result < 0 ) {
+        say "Uh oh, this system lacks the POSIX 'command' command, and thus I "
+            . "can't tell if it has all the programs installed that I need. "
+            . "Trying anyway, wish me luck...";
+        return;
+    }
+
+    my $speech_program = $self->speech_program;
+    my $quoted_speech_program = quotemeta $speech_program;
+
+    unless ( `command -v '$quoted_speech_program'` ) {
+        die "ERROR: Sweat's 'speech-program' configuration is set to "
+            . "'$speech_program', but there doesn't seem to be a program "
+            . "there. I can't run without a speech program... sorry!\n";
+    }
 
     if ( $self->entertainment ) {
+        foreach (qw (url fortune) ) {
+            my $method = "${_}_program";
+            my $program = $self->$method;
+            my $quoted_program = quotemeta $program;
+            unless ( `command -v '$quoted_program'` ) {
+            $self->$method( undef );
+            warn "WARNING: Sweat's '$_-program' configuration is set to "
+                 . "'$program', but there doesn't seem to be a program there. "
+                 . "Going ahead without $_-opening.\n";
+            }
+        }
+    }
+}
+
+
+sub _load_entertainment {
+    my $self = shift;
+    if ( $self->entertainment ) {
+        local $| = 1;
         say "Loading entertainment...";
         $self->articles;
         $self->weather;
         say "...done.";
     }
+
 }
 
 sub _build_articles {
@@ -299,7 +357,9 @@ sub order {
             $url_tempfile = $self->mangle_youtube_url( $article );
             $url = "file://$url_tempfile";
         }
-        system( $self->url_program, $url );
+        if ( defined $self->url_program ) {
+            system( $self->url_program, $url );
+        }
     }
 
     if ( $drill->requires_side_switching ) {
