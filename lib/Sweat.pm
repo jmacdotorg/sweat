@@ -124,7 +124,7 @@ has 'speech_program' => (
 has 'url_program' => (
     is => 'rw',
     isa => Maybe[Str],
-    default => sub { (uname())[0] eq 'Darwin'? 'open' : 'xdg-open' },
+    default => sub { (uname())[0] eq 'Darwin'? 'open' : undef },
 );
 
 has 'fortune_program' => (

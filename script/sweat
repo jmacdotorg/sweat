@@ -461,9 +461,12 @@ A valid command-line invocation (including any desired options) for a program th
 argument) in a browser.
 
 Default: On Mac, it will default to "open", a program that comes with the OS.
-On other it will try "xdg-open", a free and open-source program that you may
+On other systems it has no default (and thus will not open any URLs.)
+
+Non-Mac systems running Sweat may wish to try "xdg-open", a free and open-source program that you may
 need to install first. You can find xdg-open as part of "xdg-utils" in various package managers, or at
-L<https://freedesktop.org/wiki/Software/xdg-utils/>.
+L<https://freedesktop.org/wiki/Software/xdg-utils/>. Be aware that Sweat currently does not work well if it opens
+a terminal-based browser such as Lynx.
 
 =head2 Command-line-only options
 
@@ -555,6 +558,8 @@ then you must define I<all> the drills and drill-groups that Sweat will use.
 =head2 Known issues
 
 Sweat is prone to quit unexpectedly if run as the child of another process.
+
+Sweat doesn't play well with terminal-based browsers, such as Lynx.
 
 =head2 Other notes
 
