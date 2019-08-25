@@ -544,7 +544,7 @@ sub mangle_youtube_url {
     my $tempfile = File::Temp->new( SUFFIX => '.html' );
     binmode $tempfile, ":utf8";
     my $title = $article->title;
-    my $description = $article->description;
+    my $description = $article->text;
     my $url = $article->url;
 
     my ($video_id) = $url =~ m{v=(\w+)};

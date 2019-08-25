@@ -16,6 +16,12 @@ has 'text' => (
     isa => Str,
 );
 
+has 'title' => (
+    is => 'ro',
+    required => 1,
+    isa => Str,
+);
+
 has 'url' => (
     is => 'ro',
     required => 1,
@@ -38,6 +44,7 @@ sub new_from_newsapi_article {
                 . q{. }
                 . ($newsapi_article->description // q{}),
         url => $newsapi_article->url,
+        title => $newsapi_article->title,
         source => $newsapi_article,
     );
 
@@ -72,6 +79,7 @@ sub new_from_wikipedia_article {
     my $sweat_article = $class->new(
         text => ($text // 'No text found for this article, oops.'),
         url => $url,
+        title => $wikipedia_article->title,
         source => $wikipedia_article,
     );
 
