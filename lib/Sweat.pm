@@ -27,7 +27,6 @@ use namespace::clean;
 
 BEGIN {
     binmode STDOUT, ":utf8";
-    $SIG{TERM} = \&clean_up;
 
     ReadMode 3;
 }
