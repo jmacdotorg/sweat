@@ -166,7 +166,7 @@ Sweat features a friendly pause function, and a shuffle mode that will
 randomize the drills you receive within each type while keeping the types themselves in order,
 ensuring you get a varied and balanced workout.
 
-Sweat assumes you already know how to perform the drills it calls out (see L<"The Seven-Minute Workout">, below)
+Sweat assumes you already know how to perform the drills it calls out (see L<"The Seven-Minute Workout">, below),
 and trusts you to get through them in whatever way works best for you.
 Sweat will never judge you.
 
@@ -201,7 +201,7 @@ Halfway through the side-plank drill, Sweat gives you a few seconds to adjust yo
 
 =head3 No-chair and no-jumping modes
 
-A no-chair mode that substitutes other drills when you find yourself in a space (e.g. a hotel room) with no suitably stable chair to exercise with.
+A no-chair mode substitutes other drills when you find yourself in a space (e.g. a hotel room) with no suitably stable chair to exercise with.
 
 A no-jumping mode is also available when you want to avoid stomping around on your downstairs neighbor's ceiling.
 

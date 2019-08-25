@@ -41,7 +41,7 @@ Sweat features a friendly pause function, and a shuffle mode that will
 randomize the drills you receive within each type while keeping the types themselves in order,
 ensuring you get a varied and balanced workout.
 
-Sweat assumes you already know how to perform the drills it calls out
+Sweat assumes you already know how to perform the drills it calls out,
 and trusts you to get through them in whatever way works best for you.
 Sweat will never judge you.
 
@@ -76,7 +76,7 @@ Halfway through the side-plank drill, Sweat gives you a few seconds to adjust yo
 
 ### No-chair and no-jumping modes
 
-A no-chair mode that substitutes other drills when you find yourself in a space (e.g. a hotel room) with no suitably stable chair to exercise with.
+A no-chair mode substitutes other drills when you find yourself in a space (e.g. a hotel room) with no suitably stable chair to exercise with.
 
 A no-jumping mode is also available when you want to avoid stomping around on your downstairs neighbor's ceiling.
 
@@ -112,7 +112,7 @@ Or far more thorough instructions this way:
 This is this module's first release (or nearly so). It works for the
 author's own use-cases, but it's probably buggy beyond that. Please
 report issues at [the module's GitHub
-site](https://github.com/jmacdotorg/newsapi-perl). Code and documentation
+site](https://github.com/jmacdotorg/sweat). Code and documentation
 pull requests are very welcome!
 
 # Author
