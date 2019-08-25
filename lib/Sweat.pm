@@ -337,7 +337,7 @@ sub order {
 
     $self->drill_counter( $self->drill_counter + 1 );
 
-    $self->speak(
+    $self->rudely_speak(
         'Prepare for '
         . $drill->name
         . '. Drill '
@@ -349,7 +349,7 @@ sub order {
     my ($extra_text, $url, $article) = $self->entertainment_for_drill( $drill );
     $extra_text //= q{};
 
-    $self->speak( "Start now. $extra_text");
+    $self->rudely_speak( "Start now. $extra_text");
     my $url_tempfile;
     if ( defined $url ) {
         if ( $url =~ m{\Wyoutube.com/} ) {
@@ -372,7 +372,7 @@ sub order {
         $self->countdown( $self->drill_length );
     }
 
-    $self->speak( 'Rest.' );
+    $self->rudely_speak( 'Rest.' );
     sleep $self->drill_prep_length;
 }
 
@@ -524,6 +524,13 @@ sub leisurely_speak {
     my ( $self, $message ) = @_;
 
     system ( $self->speech_program, $message );
+}
+
+sub rudely_speak {
+    my ( $self, $message ) = @_;
+
+    $self->shut_up;
+    $self->speak( $message );
 }
 
 # mangle_youtube_url: create a local file that just embeds the youtube
