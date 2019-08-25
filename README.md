@@ -92,7 +92,7 @@ source, through the instructions at [http://cpanmin.us](http://cpanmin.us).)
 
 Then, run these commands:
 
-    cpanm --installdeps . # run under sudo to install at system level
+    cpanm --installdeps .
     perl Build.PL
     perl Build build
     perl Build install    # run under sudo to install at system-level
