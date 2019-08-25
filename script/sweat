@@ -563,6 +563,11 @@ Sweat doesn't play well with terminal-based browsers, such as Lynx.
 
 =head2 Other notes
 
+While the author wishes Sweat to work well on any Unix-like OS, the circumstances
+of its development mean that it will likely work best on Mac, at least for now. Consider me
+eager to receive reports of how well it works on any system, and welcoming patches and
+other suggestions for improving it anywhere.
+
 The default drills specify "knee lunges" and "abdominal crunches" because the words "lunges"
 and "crunches" sound too similar, without further context.
 
