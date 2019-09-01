@@ -4,11 +4,13 @@ use warnings;
 use strict;
 use Moo;
 use namespace::clean;
+use utf8::all;
 
 use Types::Standard qw( Str Maybe );
 
 use Scalar::Util qw( blessed );
 use HTML::Strip;
+use List::Util qw( shuffle );
 
 has 'text' => (
     is => 'ro',
@@ -27,10 +29,10 @@ has 'url' => (
     required => 1,
 );
 
-has 'source' => (
-    is => 'ro',
-    required => 1,
-);
+our $stripper = HTML::Strip->new;
+our $mw = MediaWiki::API->new;
+our $language = 'en';
+$mw->{config}->{api_url} = "https://$language.wikipedia.org/w/api.php";
 
 sub new_from_newsapi_article {
     my ( $class, $newsapi_article ) = @_;
@@ -45,45 +47,88 @@ sub new_from_newsapi_article {
                 . ($newsapi_article->description // q{}),
         url => $newsapi_article->url,
         title => $newsapi_article->title,
-        source => $newsapi_article,
     );
 
     return $sweat_article;
 }
 
-sub new_from_wikipedia_article {
-    my ($class, $wikipedia_article ) = @_;
+sub new_from_random_wikipedia_article {
+    my ($class) = @_;
 
-    die "Expected a Wikipedia article, got $wikipedia_article"
-        unless blessed($wikipedia_article)
-               && $wikipedia_article->isa( 'WWW::Wikipedia::Entry' );
+    my $title = _get_random_title();
+    return $class->new_from_wikipedia_title($title);
+}
 
-    my $text = HTML::Strip->new->parse($wikipedia_article->text);
-    $text =~ s/\{\{[^}]*?\}\}//sg;
-    $text =~ s/.*?\}\}//sg;
-    $text =~ s{<ref>.*?</ref>}{}sg;
-    $text =~ s{<ref[^>]*?/\s*>}{}g;
-    $text =~ s{https?://\S+}{}g;
+sub new_from_linked_wikipedia_article {
+    my ($class, $article) = @_;
 
-    $text =~ s{^\s*}{};
-    $text =~ s{\n\n.*$}{}s;
+    my $title = _get_random_title_linked_from_title($article->title);
+    return $class->new_from_wikipedia_title($title);
+}
 
-    $text =~ s{\[\[[^\]]*?\|(.*?)\]\]}{$1}gs;
+sub new_from_wikipedia_title {
+    my ($class, $title) = @_;
 
-    my $language = $wikipedia_article->language;
-    my $title = $wikipedia_article->title;
-    $title =~ s/ /_/g;
-
-    my $url = "https://$language.wikipedia.org/wiki/$title";
-
-    my $sweat_article = $class->new(
-        text => ($text // 'No text found for this article, oops.'),
-        url => $url,
-        title => $wikipedia_article->title,
-        source => $wikipedia_article,
+    my $summary = _get_summary_for_title($title);
+    $summary = $stripper->parse($summary);
+    return $class->new(
+        title => $title,
+        text => $summary,
+        url => "https://$language.wikipedia.org/wiki/$title",
     );
+}
 
-    return $sweat_article;
+sub _get_random_title {
+    my $result = $mw->api( {
+        list => 'random',
+        action => 'query',
+        rnnamespace => 0,
+    } );
+
+    return $result->{query}->{random}->[0]->{title};
+}
+
+sub _get_summary_for_title {
+    my ($title) = @_;
+
+    my $result = $mw->api( {
+        action => 'query',
+        prop => 'extracts',
+        exintro => undef,
+        titles => $title,
+    } );
+
+    return $stripper->parse((values(%{$result->{query}->{pages}}))[0]->{extract});
+}
+
+sub _get_random_title_linked_from_title {
+    my ($title) = @_;
+
+    my $result = $mw->api( {
+        action => 'query',
+        prop => 'links',
+        titles => $title,
+    } );
+
+    my $links_ref = (values(%{$result->{query}->{pages}}))[0]->{links};
+
+    my @links = shuffle(@$links_ref);
+
+    my $linked_title;
+
+    until ($linked_title || (@links == 0 )) {
+        if (defined $links[0]) {
+            $linked_title = $links[0]->{title};
+        }
+        shift @links;
+    }
+
+    if ($linked_title) {
+        return $linked_title;
+    }
+    else {
+        die "ERROR: No links from Wikipedia entry '$title'?! Sorry...";
+    }
 }
 
 1;

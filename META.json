@@ -50,13 +50,13 @@
             "HTML::Strip" : "0",
             "LWP" : "0",
             "List::Util" : "0",
+            "MediaWiki::API" : "0",
             "Moo" : "0",
             "POSIX" : "0",
             "Scalar::Util" : "0",
             "Term::ReadKey" : "0",
             "Try::Tiny" : "0",
             "Types::Standard" : "0",
-            "WWW::Wikipedia" : "0",
             "Web::NewsAPI" : "0",
             "YAML" : "0",
             "perl" : "v5.10.0",
@@ -76,7 +76,7 @@
          "web" : "https://github.com/jmacdotorg/sweat"
       }
    },
-   "version" : "201908240",
+   "version" : "201909010",
    "x_authority" : "cpan:JMAC",
    "x_serialization_backend" : "JSON::PP version 2.27300_01",
    "x_static_install" : 1

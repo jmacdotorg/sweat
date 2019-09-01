@@ -1,6 +1,6 @@
 package Sweat;
 
-our $VERSION = 201908240;
+our $VERSION = 201909010;
 
 use v5.10;
 
@@ -12,7 +12,7 @@ use List::Util qw(shuffle);
 use YAML;
 use File::Temp qw(tmpnam);
 use Web::NewsAPI;
-use WWW::Wikipedia;
+use MediaWiki::API;
 use LWP;
 use Try::Tiny;
 use utf8::all;
@@ -293,21 +293,15 @@ sub _build_articles {
     }
     else {
         try {
-            my $wp = WWW::Wikipedia->new;
-            my $article;
             my @articles;
-            foreach ( 1..$self->drill_count ) {
-                if ( $article ) {
-                    my @related = $article->related;
-                    my $next_topic = (shuffle(@related))[0];
-                    $article = $wp->search( $next_topic );
-                }
-                else {
-                    $article = $wp->random;
-                }
+            $articles[0] = Sweat::Article->new_from_random_wikipedia_article;
+            print '.';
+            for (1..$self->drill_count) {
                 push @articles,
-                     Sweat::Article->new_from_wikipedia_article( $article );
-                print ".";
+                    Sweat::Article->new_from_linked_wikipedia_article(
+                        $articles[-1]
+                    );
+                    print '.';
             }
             return \@articles;
         }

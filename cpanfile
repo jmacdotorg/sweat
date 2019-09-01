@@ -12,7 +12,7 @@ requires "Scalar::Util";
 requires "Term::ReadKey";
 requires "Try::Tiny";
 requires "Types::Standard";
-requires "WWW::Wikipedia";
+requires "MediaWiki::API";
 requires "Web::NewsAPI";
 requires "YAML";
 requires "utf8::all";
