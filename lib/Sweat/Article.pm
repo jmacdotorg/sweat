@@ -70,7 +70,6 @@ sub new_from_wikipedia_title {
     my ($class, $title) = @_;
 
     my $summary = _get_summary_for_title($title);
-    $summary = $stripper->parse($summary);
     return $class->new(
         title => $title,
         text => $summary,
@@ -98,7 +97,15 @@ sub _get_summary_for_title {
         titles => $title,
     } );
 
-    return $stripper->parse((values(%{$result->{query}->{pages}}))[0]->{extract});
+    my $summary = (values(%{$result->{query}->{pages}}))[0]->{extract};
+
+    if (defined $summary) {
+        return $stripper->parse( $summary );
+    }
+    else {
+        return "Failed to extract the summary from the Wikipedia article "
+               . "about '$title'. Sorry!";
+    }
 }
 
 sub _get_random_title_linked_from_title {
