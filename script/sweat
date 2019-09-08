@@ -96,7 +96,7 @@ sub show_version {
 
 sub get_config {
     my $config;
-    my $config_path = $options{config_path};
+    my $config_path = $options{config};
     if ( $config_path ) {
         unless (-r $config_path) {
             die "Can't read config file at $config_path.\n";
