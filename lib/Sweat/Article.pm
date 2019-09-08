@@ -70,6 +70,17 @@ sub new_from_wikipedia_title {
     my ($class, $title) = @_;
 
     my $summary = _get_summary_for_title($title);
+    my $tries = 0;
+    until ($summary || ($tries >= 3) ) {
+        $tries++;
+        $title = _get_random_title_linked_from_title($title);
+        $summary = _get_summary_for_title($title);
+    }
+    unless ( $summary ) {
+        $title = _get_random_title();
+        $summary = _get_summary_for_title($title);
+    }
+
     return $class->new(
         title => $title,
         text => $summary,
@@ -100,11 +111,13 @@ sub _get_summary_for_title {
     my $summary = (values(%{$result->{query}->{pages}}))[0]->{extract};
 
     if (defined $summary) {
-        return $stripper->parse( $summary );
+        $summary = $stripper->parse( $summary );
+    }
+    if ( $summary =~ /\S/ ) {
+        return $summary;
     }
     else {
-        return "Failed to extract the summary from the Wikipedia article "
-               . "about '$title'. Sorry!";
+        return undef;
     }
 }
 
@@ -115,6 +128,8 @@ sub _get_random_title_linked_from_title {
         action => 'query',
         prop => 'links',
         titles => $title,
+        plnamespace => 0,
+        pllimit => 100,
     } );
 
     my $links_ref = (values(%{$result->{query}->{pages}}))[0]->{links};
@@ -134,9 +149,10 @@ sub _get_random_title_linked_from_title {
         return $linked_title;
     }
     else {
-        die "ERROR: No links from Wikipedia entry '$title'?! Sorry...";
+        return _get_random_title();
     }
 }
+
 
 1;
 
