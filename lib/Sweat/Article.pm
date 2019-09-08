@@ -113,7 +113,7 @@ sub _get_summary_for_title {
     if (defined $summary) {
         $summary = $stripper->parse( $summary );
     }
-    if ( $summary =~ /\S/ ) {
+    if ( $summary && $summary =~ /\S/ ) {
         return $summary;
     }
     else {
