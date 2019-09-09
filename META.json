@@ -76,7 +76,7 @@
          "web" : "https://github.com/jmacdotorg/sweat"
       }
    },
-   "version" : "201909081",
+   "version" : "201909090",
    "x_authority" : "cpan:JMAC",
    "x_serialization_backend" : "JSON::PP version 2.27300_01",
    "x_static_install" : 1
