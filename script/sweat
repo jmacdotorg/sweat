@@ -114,7 +114,7 @@ sub get_config {
 
 =head1 NAME
 
-Sweat - a chatty, distracting, and flexible workout timer.
+sweat - a chatty, distracting, and flexible workout timer.
 
 =head1 SYNOPSIS
 
