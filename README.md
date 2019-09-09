@@ -86,11 +86,22 @@ It's a command-line Unixish program, so of course it's far too configurable. Hap
 
 # Installation
 
-First, make sure you have the \`cpanm\` program on your machine. It is likely
+**First, make sure you have the `cpanm` program on your machine.** It is likely
 available as "cpanminus" in your favorite package manager. (Or install it from
 source, through the instructions at [http://cpanmin.us](http://cpanmin.us).)
 
-Then, run these commands:
+Then, choose one of the options below.
+
+## Installing the latest release
+
+Run this command:
+
+    cpanm Sweat
+    
+
+## Installing from source
+
+Clone this repository locally, and then run these commands:
 
     cpanm --installdeps .
     perl Build.PL
