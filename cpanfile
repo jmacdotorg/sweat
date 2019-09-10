@@ -7,6 +7,7 @@ requires "HTML::Strip";
 requires "LWP";
 requires "List::Util";
 requires "Moo";
+requires "namespace::clean";
 requires "POSIX";
 requires "Scalar::Util";
 requires "Term::ReadKey";
