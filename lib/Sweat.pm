@@ -1,6 +1,6 @@
 package Sweat;
 
-our $VERSION = 201909090;
+our $VERSION = 201909091;
 
 use v5.10;
 
