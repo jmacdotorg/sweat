@@ -315,6 +315,11 @@ The number of drills to include in the workout.
 If Sweat runs through every available drill before meeting this number, then
 it will start a new set, continuing until it meets this count.
 
+B<Please consider not setting this above 12.> I don't advise you to run through
+lots of drills without any periods of longer resting. Consider, instead, just
+running Sweat multiple times, if you want an extra-long workout, and taking a
+breather that lasts a full minute or two in between runs. Drink some water.
+
 Default: 12
 
 B<Please note> that you should not work through a large number of drills without mixing
@@ -552,6 +557,10 @@ individual drill definitions.
 
 Please note that the C<groups> attribute is not additive; if you define it at all,
 then you must define I<all> the drills and drill-groups that Sweat will use.
+
+Sweat will let you give groups uneven numbers of drills, if you want. If Sweat
+needs to run a drill from a group whose available drills have already all been
+run during the current workout, it will clear them all for running again.
 
 =head1 NOTES AND BUGS
 
