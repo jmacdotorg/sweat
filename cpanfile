@@ -5,6 +5,7 @@ requires "File::Temp";
 requires "FindBin";
 requires "HTML::Strip";
 requires "LWP";
+requires "LWP::Protocol::https";
 requires "List::Util";
 requires "Moo";
 requires "namespace::clean";
