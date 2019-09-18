@@ -2,6 +2,7 @@ requires "File::HomeDir";
 requires "File::Slurper";
 requires "File::Spec";
 requires "File::Temp";
+requires "File::Which";
 requires "FindBin";
 requires "HTML::Strip";
 requires "LWP";

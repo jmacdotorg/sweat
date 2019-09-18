@@ -46,6 +46,7 @@
             "File::Slurper" : "0",
             "File::Spec" : "0",
             "File::Temp" : "0",
+            "File::Which" : "0",
             "FindBin" : "0",
             "HTML::Strip" : "0",
             "LWP" : "0",
@@ -78,7 +79,7 @@
          "web" : "https://github.com/jmacdotorg/sweat"
       }
    },
-   "version" : "201909170",
+   "version" : "201909171",
    "x_authority" : "cpan:JMAC",
    "x_contributors" : [
       "Mohammad S Anwar <mohammad.anwar@yahoo.com>"
