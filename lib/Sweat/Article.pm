@@ -31,8 +31,7 @@ has 'url' => (
 
 our $stripper = HTML::Strip->new;
 our $mw = MediaWiki::API->new;
-our $language = 'en';
-$mw->{config}->{api_url} = "https://$language.wikipedia.org/w/api.php";
+our $language;
 
 sub new_from_newsapi_article {
     my ( $class, $newsapi_article ) = @_;
