@@ -81,7 +81,8 @@ $0 --shuffle
 $0 --no-chair --speech-program=espeak
 $0 --config=/path/to/sweat/config --no-news
 
-For more thorough documentation, please run `man sweat`.
+For more thorough documentation, please visit https://jmac.org/sweat. (If you
+happen to have the Sweat manpage installed, you can also try `man sweat`.)
 
 END
     exit;
