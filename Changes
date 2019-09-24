@@ -2,6 +2,8 @@ Revision history for Perl extension Sweat
 
 {{$NEXT}}
 
+201909240 2019-09-24T20:55:34Z
+
     - Adding a "language" config option for setting Wikipedia localization.
     
     - Declining to follow links to Wikipedia articles with numerals in the title, in an effort to avoid boring chains of annual-statistics pages.
