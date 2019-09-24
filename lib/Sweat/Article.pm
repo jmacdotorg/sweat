@@ -139,7 +139,13 @@ sub _get_random_title_linked_from_title {
 
     until ($linked_title || (@links == 0 )) {
         if (defined $links[0]) {
-            $linked_title = $links[0]->{title};
+            my $proposed_title = $links[0]->{title};
+            # Skip any title with a numeral in it (to stay away from annual-
+            # statistics gravity wells)
+            unless ($proposed_title =~ /\d/) {
+                $linked_title = $proposed_title;
+                warn "I chose $proposed_title.\n";
+            }
         }
         shift @links;
     }
