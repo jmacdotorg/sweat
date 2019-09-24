@@ -147,7 +147,6 @@ sub _get_random_title_linked_from_title {
             # statistics gravity wells)
             unless ($proposed_title =~ /\d/) {
                 $linked_title = $proposed_title;
-                warn "I chose $proposed_title.\n";
             }
         }
         shift @links;
