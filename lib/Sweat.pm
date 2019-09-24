@@ -263,7 +263,7 @@ sub _load_entertainment {
     my $self = shift;
     if ( $self->entertainment ) {
         local $| = 1;
-        say "Loading entertainment...";
+        say "Loading entertainment, please wait...";
         $self->articles;
         $self->weather;
         say "...done.";

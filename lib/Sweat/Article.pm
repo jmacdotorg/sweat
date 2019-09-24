@@ -31,6 +31,9 @@ has 'url' => (
 
 our $stripper = HTML::Strip->new;
 our $mw = MediaWiki::API->new;
+
+$mw->{config}->{max_lag} = 2;
+$mw->{config}->{max_lag_delay} = 1;
 our $language;
 
 sub new_from_newsapi_article {
