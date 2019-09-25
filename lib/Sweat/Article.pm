@@ -11,6 +11,7 @@ use Types::Standard qw( Str Maybe );
 use Scalar::Util qw( blessed );
 use HTML::Strip;
 use List::Util qw( shuffle );
+use MediaWiki::API;
 
 has 'text' => (
     is => 'ro',
@@ -114,6 +115,15 @@ sub _get_summary_for_title {
 
     if (defined $summary) {
         $summary = $stripper->parse( $summary );
+        # Eliminate all parentheticals (birth/death dates, alternate-language
+        # representations, and so on) because they don't read out loud well.
+        my $found_some;
+        until ( defined($found_some) && not($found_some) ) {
+            $found_some = $summary =~ s/\([^\(]*?\)//g;
+        }
+        # Clean up redundant whitespace, and whitespace before punctuation.
+        $summary =~ s/\s+([,.!?;:])/$1/g;
+        $summary =~ s/ {2,}/ /g;
     }
     if ( $summary && $summary =~ /\S/ ) {
         return $summary;
@@ -122,6 +132,17 @@ sub _get_summary_for_title {
         return undef;
     }
 }
+
+sub _erase_parentheticals {
+    my ( $summary, $opener, $closer ) = @_;
+    my $found_some;
+    until ( defined($found_some) && not($found_some) ) {
+        $found_some = $summary =~ s/\([^\(]*?\)//g;
+        warn "Found some: $found_some\n";
+    }
+    return $summary;
+}
+
 
 sub _get_random_title_linked_from_title {
     my ($title) = @_;
