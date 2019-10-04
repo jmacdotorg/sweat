@@ -217,7 +217,7 @@ sub BUILD {
         $self->group_config( $group_data );
     }
 
-    if ( $args->{no_news} ) {
+    if ( $config->{no_news} ) {
         $self->newsapi_key( undef );
     }
 
