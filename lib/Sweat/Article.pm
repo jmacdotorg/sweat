@@ -164,9 +164,13 @@ sub _get_random_title_linked_from_title {
     until ($linked_title || (@links == 0 )) {
         if (defined $links[0]) {
             my $proposed_title = $links[0]->{title};
-            # Skip any title with a numeral in it (to stay away from annual-
-            # statistics gravity wells)
-            unless ($proposed_title =~ /\d/) {
+            # Skip:
+            # * Any title with a numeral in it (to stay away from annual-
+            #   statistics gravity wells)
+            # * Any title with a word suggesting it's a just a list or table
+            unless (
+                $proposed_title =~ /\d|^list of\s|^comparison of\s|^table of\s/i
+            ) {
                 $linked_title = $proposed_title;
             }
         }
