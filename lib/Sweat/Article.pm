@@ -37,6 +37,8 @@ $mw->{config}->{max_lag} = 2;
 $mw->{config}->{max_lag_delay} = 1;
 our $language;
 
+our %seen_titles;
+
 sub new_from_newsapi_article {
     my ( $class, $newsapi_article ) = @_;
 
@@ -165,13 +167,17 @@ sub _get_random_title_linked_from_title {
         if (defined $links[0]) {
             my $proposed_title = $links[0]->{title};
             # Skip:
+            # * Any title we've already seen
             # * Any title with a numeral in it (to stay away from annual-
             #   statistics gravity wells)
             # * Any title with a word suggesting it's a just a list or table
             unless (
+                $seen_titles{$proposed_title}
+                &&
                 $proposed_title =~ /\d|^list of\s|^comparison of\s|^table of\s/i
             ) {
                 $linked_title = $proposed_title;
+                $seen_titles{$proposed_title} = 1;
             }
         }
         shift @links;
