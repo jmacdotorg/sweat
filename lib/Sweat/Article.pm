@@ -173,7 +173,7 @@ sub _get_random_title_linked_from_title {
             # * Any title with a word suggesting it's a just a list or table
             unless (
                 $seen_titles{$proposed_title}
-                &&
+                ||
                 $proposed_title =~ /\d|^list of\s|^comparison of\s|^table of\s/i
             ) {
                 $linked_title = $proposed_title;
