@@ -2,7 +2,13 @@ Revision history for Perl extension Sweat
 
 {{$NEXT}}
 
-    - Dropping parentheticals (e.g. birth and death dates, original-language spellings, and IPA pronunciations) from Wikipedia articles' summaries, because they often do not read out loud well.
+    - Changes to Wikipedia mode:
+    
+        - Avoiding repeating any article during a single workout
+        
+        - Avoiding articles with certain keywords in the title that suggest primarily non-prose content (e.g. "List of" or "Comparison of")
+
+        - Dropping parentheticals (e.g. birth and death dates, original-language spellings, and IPA pronunciations) from Wikipedia articles' summaries, because they often do not read out loud well.
 
     - Fixing a bug that would ignore "no-news" in a config file.
 
