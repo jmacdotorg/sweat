@@ -11,6 +11,8 @@ Revision history for Perl extension Sweat
         - Dropping parentheticals (e.g. birth and death dates, original-language spellings, and IPA pronunciations) from Wikipedia articles' summaries, because they often do not read out loud well.
 
     - Fixing a bug that would ignore "no-news" in a config file.
+    
+    - Fixed incorrect docs and sample-config info (Thanks to Tim Vroom)
 
 201909240 2019-09-24T20:55:34Z
 
