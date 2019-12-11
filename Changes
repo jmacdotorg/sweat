@@ -2,6 +2,8 @@ Revision history for Perl extension Sweat
 
 {{$NEXT}}
 
+201912110 2019-12-11T19:38:38Z
+
     - Changes to Wikipedia mode:
     
         - Avoiding repeating any article during a single workout
