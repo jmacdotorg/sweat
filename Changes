@@ -2,6 +2,8 @@ Revision history for Perl extension Sweat
 
 {{$NEXT}}
 
+    - Improved CPAN distribution abstract (Thanks to Toby Inkster for the suggestion)
+
 201912110 2019-12-11T19:38:38Z
 
     - Changes to Wikipedia mode:
