@@ -2,6 +2,8 @@ Revision history for Perl extension Sweat
 
 {{$NEXT}}
 
+    - Wikipedia articles now load in the background during the workout, rather than forcing a pre-workout wait while they all finish loading.
+
     - Improved CPAN distribution abstract (Thanks to Toby Inkster for the suggestion)
 
 201912110 2019-12-11T19:38:38Z

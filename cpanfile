@@ -10,6 +10,7 @@ requires "LWP::Protocol::https";
 requires "List::Util";
 requires "Moo";
 requires "namespace::clean";
+requires "Path::Tiny";
 requires "POSIX";
 requires "Scalar::Util";
 requires "Term::ReadKey";

@@ -22,6 +22,7 @@ use File::Which;
 
 use Sweat::Group;
 use Sweat::Article;
+use Sweat::ArticleHandler;
 
 use Moo;
 use namespace::clean;
@@ -151,9 +152,11 @@ has 'language' => (
     default => 'en',
 );
 
-has 'articles' => (
-    is => 'lazy',
-    isa => ArrayRef,
+has 'article_handler' => (
+    is => 'ro',
+    isa => sub { $_[0]->isa('Sweat::ArticleHandler') },
+    default => sub { Sweat::ArticleHandler->new },
+    handles => [ qw( add_article next_article ) ],
 );
 
 has 'weather' => (
@@ -264,14 +267,14 @@ sub _load_entertainment {
     if ( $self->entertainment ) {
         local $| = 1;
         say "Loading entertainment, please wait...";
-        $self->articles;
+        $self->_load_articles;
         $self->weather;
         say "...done.";
     }
 
 }
 
-sub _build_articles {
+sub _load_articles {
     my $self = shift;
 
     if ( $self->newsapi_key ) {
@@ -283,10 +286,11 @@ sub _build_articles {
                 country => $self->country,
                 pageSize => $self->drill_count,
             );
-            return [
-                map { Sweat::Article->new_from_newsapi_article($_) }
-                    $result->articles
-            ];
+            foreach ( $result->articles ) {
+                $self->add_article(
+                    Sweat::Article->new_from_newsapi_article($_)
+                );
+            }
         }
         catch {
             die "Sweat ran into a problem fetching news articles: $_\n";
@@ -294,17 +298,16 @@ sub _build_articles {
     }
     else {
         try {
-            my @articles;
-            $articles[0] = Sweat::Article->new_from_random_wikipedia_article;
-            print '.';
-            for (1..$self->drill_count) {
-                push @articles,
-                    Sweat::Article->new_from_linked_wikipedia_article(
-                        $articles[-1]
-                    );
-                    print '.';
+            my $article = Sweat::Article->new_from_random_wikipedia_article;
+            unless ( fork ) {
+                $self->add_article( $article );
+                for (1..$self->drill_count) {
+                    $article = Sweat::Article->
+                               new_from_linked_wikipedia_article($article);
+                    $self->add_article( $article );
+                }
+                exit;
             }
-            return \@articles;
         }
         catch {
             die "Sweat ran into a problem fetching Wikipedia articles: $_\n";
@@ -468,12 +471,6 @@ sub fortune {
     }
 
     return $text;
-}
-
-sub next_article {
-    my $self = shift;
-
-    return shift @{ $self->articles };
 }
 
 sub _build_weather {
