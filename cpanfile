@@ -13,6 +13,7 @@ requires "namespace::clean";
 requires "Path::Tiny";
 requires "POSIX";
 requires "Scalar::Util";
+requires "Storable";
 requires "Term::ReadKey";
 requires "Try::Tiny";
 requires "Types::Standard";
