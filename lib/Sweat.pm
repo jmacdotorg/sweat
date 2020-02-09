@@ -1,6 +1,6 @@
 package Sweat;
 
-our $VERSION = 202002070;
+our $VERSION = 202002071;
 
 use v5.10;
 
@@ -135,6 +135,17 @@ has 'fortune_program' => (
     default => 'fortune',
 );
 
+has 'refocus_program' => (
+    is => 'lazy',
+    isa => Maybe[Str],
+);
+
+has 'refocus' => (
+    is => 'rw',
+    isa => Bool,
+    default => 0,
+);
+
 has 'newsapi_key' => (
     is => 'rw',
     isa => Maybe[Str],
@@ -196,7 +207,7 @@ sub BUILD {
         _mangle_args( $_ );
     }
 
-    for my $method( qw(shuffle entertainment chair jumping)) {
+    for my $method( qw(shuffle entertainment chair jumping refocus)) {
         next if defined $args->{$method};
         if ( defined $config->{$method} ) {
             my $value = $config->{$method} // 0;
@@ -357,6 +368,9 @@ sub order {
         }
         if ( defined $self->url_program ) {
             system( split (/\s+/, $self->url_program), $url );
+            if ( defined $self->refocus_program ) {
+                system $self->refocus_program;
+            }
         }
     }
 
@@ -637,6 +651,30 @@ sub _mangle_args {
             delete $$args{$key};
         }
     }
+}
+
+sub _build_refocus_program {
+    my $self = shift;
+
+    return unless $self->refocus;
+
+    unless ( which( 'pstree' ) ) {
+        say "The refocus feature requires the 'pstree' program to be "
+            . "installed. I can't find it, so I won't be able to "
+            . "refocus the window during the workout. Sorry...";
+        return;
+    }
+
+    my $pstree = `pstree -p $$`;
+
+    if ( (uname())[0] eq 'Darwin') {
+        my ($app) = $pstree =~ /(\S+Applications\S+)/;
+        return "open -a $app";
+    }
+    else {
+        return;
+    }
+
 }
 
 1;
