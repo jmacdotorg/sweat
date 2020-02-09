@@ -29,6 +29,7 @@ GetOptions ( \%options,
     'drill-length=i',
     'rest-length=i',
     'drill-count=i',
+    'refocus!',
 );
 
 show_help_and_exit() if $options{help};
@@ -476,6 +477,24 @@ You can fetch a free key for personal use at L<https://newsapi.org>.
 If I<not> set, then Sweat will read and display Wikipedia articles instead.
 
 Default: none
+
+=head3 refocus
+
+ # On the command line
+ sweat --refocus
+
+ # In config
+ refocus=1
+
+B<Boolean.> Try to return focus back to the terminal window running Sweat after
+opening a new browser tab (via L<"url-program">). This is useful mainly to make
+Sweat's handful of interactive features (e.g. the pause function) more
+convenient, obviating the need to switch back to the terminal from the browser
+before taking the desired action.
+
+This feature requires C<pstree> to be installed on Mac, or C<xdotool> on Linux.
+
+Default: 0 (don't try to refocus)
 
 =head3 url-program
 

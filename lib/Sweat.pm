@@ -658,21 +658,45 @@ sub _build_refocus_program {
 
     return unless $self->refocus;
 
-    unless ( which( 'pstree' ) ) {
-        say "The refocus feature requires the 'pstree' program to be "
-            . "installed. I can't find it, so I won't be able to "
-            . "refocus the window during the workout. Sorry...";
-        return;
-    }
-
     my $pstree = `pstree -p $$`;
 
     if ( (uname())[0] eq 'Darwin') {
+        unless ( which( 'pstree' ) ) {
+            warn "The refocus feature requires the 'pstree' program to be "
+                . "installed. I can't find it, so I won't be able to "
+                . "refocus the window during the workout. Sorry...\n";
+            return;
+        }
+
         my ($app) = $pstree =~ /(\S+Applications\S+)/;
-        return "open -a $app";
+        if ($app) {
+            return "open -a $app";
+        }
+        else {
+            warn "I can't figure out what terminal I'm running in?! "
+                 . "I won't be able to refocus the window during the "
+                 . "workout. Sorry...\n";
+            return;
+        }
     }
     else {
-        return;
+        unless ( which( 'xdotool' ) ) {
+            warn "The refocus feature requires the 'xdotool' program to be "
+                . "installed. I can't find it, so I won't be able to "
+                . "refocus the window during the workout. Sorry...\n";
+            return;
+        }
+
+        my $window_id = `xdotool getactivewindow`;
+        if ( $window_id ) {
+            return "xdotool windowactivate $window_id";
+        }
+        else {
+            warn "I can't figure out what window I'm running in?! "
+                 . "I won't be able to refocus the window during the "
+                 . "workout. Sorry...\n";
+            return;
+        }
     }
 
 }
