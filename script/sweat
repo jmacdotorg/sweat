@@ -75,6 +75,7 @@ Entertainment options:
 --language         Two-letter code of language for Wikipedia articles
 --no-news          Use Wikipedia as article source even if NewsAPI is available
 --url-program      Path to a program that opens a URL in your default browser
+--refocus          Attempt to refocus on Sweat's window after opening a URL
 
 Examples:
 $0

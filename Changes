@@ -2,6 +2,8 @@ Revision history for Perl extension Sweat
 
 {{$NEXT}}
 
+    - Adding a "refocus" option that will attempt to refocus back to the window Sweat is running in after it opens a browser window.
+
     - Wikipedia articles now load in the background during the workout, rather than forcing a pre-workout wait while they all finish loading.
 
     - Improved CPAN distribution abstract (Thanks to Toby Inkster for the suggestion)
