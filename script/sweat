@@ -610,8 +610,6 @@ run during the current workout, it will clear them all for running again.
 
 =head2 Known issues
 
-Sweat is prone to quit unexpectedly if run as the child of another process.
-
 Sweat doesn't play well with terminal-based browsers, such as Lynx.
 
 =head2 Other notes
@@ -635,7 +633,7 @@ Jason McIntosh <jmac@jmac.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2019 by Jason McIntosh.
+This software is Copyright (c) 2019-2020 by Jason McIntosh.
 
 This is free software, licensed under:
 
