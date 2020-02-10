@@ -55,7 +55,9 @@
             "MediaWiki::API" : "0",
             "Moo" : "0",
             "POSIX" : "0",
+            "Path::Tiny" : "0",
             "Scalar::Util" : "0",
+            "Storable" : "0",
             "Term::ReadKey" : "0",
             "Try::Tiny" : "0",
             "Types::Standard" : "0",
@@ -79,7 +81,7 @@
          "web" : "https://github.com/jmacdotorg/sweat"
       }
    },
-   "version" : "201912110",
+   "version" : "202002100",
    "x_authority" : "cpan:JMAC",
    "x_contributors" : [
       "Mohammad S Anwar <mohammad.anwar@yahoo.com>",
