@@ -1,6 +1,6 @@
 package Sweat;
 
-our $VERSION = 202002100;
+our $VERSION = 202002101;
 
 use v5.10;
 
@@ -261,6 +261,7 @@ sub _check_resources {
         foreach (qw (url fortune) ) {
             my $method = "${_}_program";
             my $program = $self->$method;
+            next unless defined $program;
             my $bare_program = (split /\s+/, $program)[0];
             unless ( which( $bare_program ) ) {
                 $self->$method( undef );
