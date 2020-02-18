@@ -305,15 +305,15 @@ sub _load_articles {
         }
         else {
             my $article = Sweat::Article->new_from_random_wikipedia_article;
-                unless ( fork ) {
+            unless ( fork ) {
+                $self->add_article( $article );
+                for (1..$self->drill_count) {
+                    $article = Sweat::Article->
+                               new_from_linked_wikipedia_article($article);
                     $self->add_article( $article );
-                    for (1..$self->drill_count) {
-                        $article = Sweat::Article->
-                                   new_from_linked_wikipedia_article($article);
-                        $self->add_article( $article );
-                    }
-                    exit;
                 }
+                exit;
+            }
         }
     }
     catch {
