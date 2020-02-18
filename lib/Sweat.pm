@@ -288,8 +288,8 @@ sub _load_entertainment {
 sub _load_articles {
     my $self = shift;
 
-    if ( $self->newsapi_key ) {
-        try {
+    try {
+        if ( $self->newsapi_key ) {
             my $newsapi = Web::NewsAPI->new(
                 api_key => $self->newsapi_key,
             );
@@ -303,28 +303,24 @@ sub _load_articles {
                 );
             }
         }
-        catch {
-            die "Sweat ran into a problem fetching news articles: $_\n";
-        };
-    }
-    else {
-        try {
+        else {
             my $article = Sweat::Article->new_from_random_wikipedia_article;
-            unless ( fork ) {
-                $self->add_article( $article );
-                for (1..$self->drill_count) {
-                    $article = Sweat::Article->
-                               new_from_linked_wikipedia_article($article);
+                unless ( fork ) {
                     $self->add_article( $article );
+                    for (1..$self->drill_count) {
+                        $article = Sweat::Article->
+                                   new_from_linked_wikipedia_article($article);
+                        $self->add_article( $article );
+                    }
+                    exit;
                 }
-                exit;
-            }
         }
-        catch {
-            die "Sweat ran into a problem fetching Wikipedia articles: $_\n";
-        };
     }
-
+    catch {
+        die "Sweat ran into a problem fetching articles. Check your internet\n"
+            . "connection, or run with --no-entertainment to use sweat without\n"
+            . "loading any online distractions.\n";
+    }
 }
 
 my $temp_file = tmpnam();
