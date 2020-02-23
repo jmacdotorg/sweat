@@ -356,7 +356,13 @@ sub order {
     my ($extra_text, $url, $article) = $self->entertainment_for_drill( $drill );
     $extra_text //= q{};
 
+    # XXX Set the binmode to raw temporarily if we're side-switching (and thus
+    #     reporting weather.) This is a hack to get around a strange encoding
+    #     issue in this case only.
+    binmode STDOUT, ':raw' if $drill->requires_side_switching;
     $self->rudely_speak( "Start now. $extra_text");
+    binmode STDOUT, ':utf8' if $drill->requires_side_switching;
+
     my $url_tempfile;
     if ( defined $url ) {
         if ( $url =~ m{\Wyoutube.com/} ) {
