@@ -2,6 +2,8 @@ Revision history for Perl extension Sweat
 
 {{$NEXT}}
 
+202002270 2020-02-28T01:54:16Z
+
     - Adding a simple interactive mode.
 
     - Better handling of unset configuration options and connectivity problems. Thanks to grai ("sudo-batman") for the bug reports.
