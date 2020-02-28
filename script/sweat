@@ -30,6 +30,7 @@ GetOptions ( \%options,
     'rest-length=i',
     'drill-count=i',
     'refocus!',
+    'interactive',
 );
 
 show_help_and_exit() if $options{help};
@@ -41,6 +42,8 @@ my %sweat_args = %options;
 $sweat_args{ config } = $config;
 
 my $sweat = Sweat->new( %sweat_args );
+
+run_wizard( $sweat ) if $sweat_args{ interactive };
 
 $sweat->sweat;
 
@@ -115,6 +118,61 @@ sub get_config {
         $config = read_text( $config_path );
     }
     return $config;
+}
+
+sub run_wizard {
+    my ($sweat) = @_;
+    show_version();
+
+    my $drill_count;
+
+    until ($drill_count) {
+        say 'How many drills today? ('
+            . $sweat->drill_count
+            . ')'
+        ;
+        chomp(my $input = <STDIN>);
+        if ($input && $input =~ /^\d+$/) {
+            $drill_count = $input;
+        }
+        elsif (not length $input) {
+            last;
+        }
+        else {
+            say 'Please provide a positive number, or just press [Return] ';
+            say 'to accept the default number of drills.';
+        }
+    }
+
+    $sweat->drill_count( $drill_count ) if $drill_count;
+
+    my $entertainment;
+
+    until (defined $entertainment) {
+        say 'Activate entertainment mode? ('
+            . ($sweat->entertainment? 'yes' : 'no')
+            . ')'
+        ;
+
+        chomp(my $input = <STDIN>);
+        if ($input =~ /^y/i) {
+            $entertainment = 1;
+        }
+        elsif ($input =~ /^n/i) {
+            $entertainment = 0;
+        }
+        elsif (not length $input) {
+            last;
+        }
+        else {
+            say 'Please answer "yes" or "no", or just press [Return] ';
+            say 'to accept the default answer.';
+        }
+    }
+
+    $sweat->entertainment( $entertainment ) if defined $entertainment;
+
+    return $sweat;
 }
 
 =head1 NAME
@@ -286,6 +344,16 @@ the internet, the current weather, and other stuff.
 See L<"Entertainment options"> to fine-tune this behavior.
 
 Default: 1
+
+=head3 interactive
+
+ # On the command line
+ sweat --interactive
+ sweat -i
+
+If set, then Sweat will ask a couple of questions at launch about
+how many drills you'd like, and whether to activate its entertainment features.
+Answers you provide will override values otherwise set by config or default.
 
 =head3 speech-program
 

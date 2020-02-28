@@ -1,6 +1,6 @@
 package Sweat;
 
-our $VERSION = 202002101;
+our $VERSION = 202002270;
 
 use v5.10;
 
@@ -242,7 +242,6 @@ sub BUILD {
         . ".wikipedia.org/w/api.php";
 
     $self->_check_resources;
-    $self->_load_entertainment;
 }
 
 sub _check_resources {
@@ -330,6 +329,8 @@ sub sweat {
     my $self = shift;
 
     ReadMode 3;
+
+    $self->_load_entertainment;
 
     for my $drill (@{ $self->drills }) {
         $self->order($drill);
