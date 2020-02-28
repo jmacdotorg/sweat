@@ -62,6 +62,7 @@ Basic options:
 --version          Show version information and exit
 --speech-program   Path to your text-to-speech program
 --no-entertainment Disable Sweat's various entertainment features
+--interactive      Ask you interactively for common options (-i for short!)
 
 Drill options:
 --drill-length     Length of each drill, in seconds (default 30)
@@ -123,6 +124,7 @@ sub get_config {
 sub run_wizard {
     my ($sweat) = @_;
     show_version();
+    say q{};
 
     my $drill_count;
 
@@ -142,6 +144,7 @@ sub run_wizard {
             say 'Please provide a positive number, or just press [Return] ';
             say 'to accept the default number of drills.';
         }
+        say q{};
     }
 
     $sweat->drill_count( $drill_count ) if $drill_count;
@@ -168,6 +171,7 @@ sub run_wizard {
             say 'Please answer "yes" or "no", or just press [Return] ';
             say 'to accept the default answer.';
         }
+        say q{};
     }
 
     $sweat->entertainment( $entertainment ) if defined $entertainment;
@@ -344,16 +348,6 @@ the internet, the current weather, and other stuff.
 See L<"Entertainment options"> to fine-tune this behavior.
 
 Default: 1
-
-=head3 interactive
-
- # On the command line
- sweat --interactive
- sweat -i
-
-If set, then Sweat will ask a couple of questions at launch about
-how many drills you'd like, and whether to activate its entertainment features.
-Answers you provide will override values otherwise set by config or default.
 
 =head3 speech-program
 
@@ -602,6 +596,15 @@ Default: C<.sweat>, in your home directory. (i.e. C<$HOME/.sweat>)
  sweat --help
 
 Prints a quick reference to Sweat's command-line options, then exits.
+
+=head3 interactive
+
+ sweat --interactive
+ sweat -i
+
+Sweat will ask a couple of questions at launch about
+how many drills you'd like, and whether to activate its entertainment features.
+Answers you provide will override values otherwise set by config or default.
 
 =head3 no-news
 
