@@ -2,6 +2,8 @@ Revision history for Perl extension Sweat
 
 {{$NEXT}}
 
+    - More graceful reaction to articles failing to load midway through the workout.
+
 202002270 2020-02-28T01:54:16Z
 
     - Adding a simple interactive mode.
