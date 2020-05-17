@@ -317,9 +317,10 @@ sub _load_articles {
         }
     }
     catch {
+        clean_up();
         die "Sweat ran into a problem fetching articles. Check your internet\n"
             . "connection, or run with --no-entertainment to use sweat without\n"
-            . "loading any online distractions.\n";
+            . "loading any online distractions.\n\n(Error text: $_)\n";
     }
 }
 
