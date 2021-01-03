@@ -4,7 +4,7 @@
       "Jason McIntosh <jmac@jmac.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.1.8, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Minilla/v3.1.10, CPAN::Meta::Converter version 2.150005",
    "license" : [
       "mit"
    ],
@@ -81,7 +81,7 @@
          "web" : "https://github.com/jmacdotorg/sweat"
       }
    },
-   "version" : "202005170",
+   "version" : "202101030",
    "x_authority" : "cpan:JMAC",
    "x_contributors" : [
       "Mohammad S Anwar <mohammad.anwar@yahoo.com>",
